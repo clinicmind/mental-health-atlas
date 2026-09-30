@@ -11,7 +11,7 @@ HK,2020,all,all,age_std_rate,9.1,per 100000,no,csrp_2021,,
 HK,2021,all,all,crude_rate,12.3,per 100000,no,csrp_2022,,
 HK,2021,all,all,age_std_rate,9.0,per 100000,no,csrp_2022,,
 HK,2023,all,all,crude_rate,13.5,per 100000,no,csrp_2025,CSRP 2024 release gave 13.6,防止自殺研究中心 2024 年新聞稿為 13.6
-HK,2024,all,all,crude_rate,14.1,per 100000,no,csrp_2025,Estimated by CSRP,防止自殺研究中心估算
+HK,2024,all,all,crude_rate,13.8,per 100000,no,csrp_2026,Revised estimate; the Sep 2025 release gave 14.1,修訂估算；2025 年 9 月新聞稿為 14.1
 HK,2024,all,all,age_std_rate,10.6,per 100000,no,csrp_2025,,
 HK,2020,male,all,crude_rate,16.3,per 100000,no,csrp_2021,,
 HK,2020,female,all,crude_rate,8.6,per 100000,no,csrp_2021,,
@@ -80,10 +80,26 @@ MO,2019,all,all,deaths,66,deaths,no,ucanews_2024,,
 MO,2021,all,all,deaths,60,deaths,no,ucanews_2024,,
 MO,2022,all,all,deaths,80,deaths,no,mdt_2023,,
 MO,2023,all,all,deaths,88,deaths,no,mdt_2023,Sum of the four Health Bureau quarterly releases,衛生局四季公布數字之和
-MO,2024,all,all,deaths,90,deaths,no,mdt_2024,Sum of the four Health Bureau quarterly releases (22+22+21+25),衛生局四季公布數字之和（22+22+21+25）
+MO,2024,all,all,deaths,90,deaths,no,mdt_2024,Sum of the four Health Bureau quarterly releases (22+22+21+25); AAMacau reported 91,衛生局四季公布數字之和（22+22+21+25）；論盡媒體報道為 91 宗
 MO,2025,all,all,deaths,91,deaths,no,mb_2025,"Highest since records began in 1990. Same article implies 86 for 2024, which does not match the quarterly releases",自 1990 年有紀錄以來最高。同一報道推算 2024 年為 86 宗，與季度公布數字不符
 MO,2022,all,all,crude_rate,11.9,per 100000,yes,mdt_2023,"Deaths / population of about 672,000","死亡人數 ÷ 人口約 672,000"
 MO,2023,all,all,crude_rate,12.9,per 100000,yes,mdt_2023,"Deaths / population of about 684,000","死亡人數 ÷ 人口約 684,000"
 MO,2024,all,all,crude_rate,13.1,per 100000,yes,mdt_2024,"Deaths / population of about 688,000","死亡人數 ÷ 人口約 688,000"
 MO,2025,all,all,crude_rate,13.2,per 100000,yes,mb_2025,"Deaths / population of 689,000 given in the article","死亡人數 ÷ 報道所載人口 689,000"
 MO,2023,male,all,deaths,57,deaths,no,mdt_2023,,
+HK,2018,all,all,crude_rate,12.2,per 100000,no,csrp_2019,Estimated by CSRP,防止自殺研究中心估算
+HK,2022,all,all,crude_rate,14.5,per 100000,no,csrp_2023,,
+HK,2022,all,all,age_std_rate,10.6,per 100000,no,csrp_2023,,
+HK,2025,all,all,crude_rate,13.0,per 100000,no,csrp_2026,Estimated by CSRP (13.01),防止自殺研究中心估算（13.01）
+HK,2025,all,all,age_std_rate,9.8,per 100000,no,csrp_2026,Estimated by CSRP,防止自殺研究中心估算
+HK,2018,all,15-24,crude_rate,9.5,per 100000,no,csrp_2019,Estimated by CSRP,防止自殺研究中心估算
+HK,2022,all,15-24,crude_rate,12.2,per 100000,no,csrp_2023,Highest on record,歷史新高
+HK,2024,all,15-24,crude_rate,11.7,per 100000,no,koreatimes_2026,Reported from HKU centre data,報道引用港大中心數據
+TW,2025,all,all,deaths,3951,deaths,no,mohw_cod_2025,111 fewer than 2024,較 2024 年減少 111 人
+TW,2025,all,all,crude_rate,16.9,per 100000,no,mohw_cod_2025,,
+MO,2015,all,all,deaths,62,deaths,no,gcs_2016,53 were Macau residents,其中 53 人為澳門居民
+MO,2015,all,all,crude_rate,9.6,per 100000,no,gcs_2016,,
+MO,2016,all,all,deaths,63,deaths,no,bastille_2017,52 were Macau residents,其中 52 人為澳門居民
+MO,2016,all,all,crude_rate,9.7,per 100000,no,bastille_2017,,
+MO,2020,all,all,deaths,76,deaths,no,govmo_2021,,
+MO,2020,all,all,crude_rate,11.1,per 100000,no,govmo_2021,,

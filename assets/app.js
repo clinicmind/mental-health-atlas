@@ -265,7 +265,7 @@
     }
     if (has("hk-youth")) {
       const pts = suicide({ region: "HK", sex: "all", age_group: "15-24", measure: "crude_rate" }).map(d => ({ x: +d.year, y: +d.value }));
-      Charts.lineChart(has("hk-youth"), { series: [{ id: "HK", label: t("g_youth"), color: "--s-hk", points: pts }], xMin: 2011, xMax: 2022, fmt: (v, a) => a ? String(+v.toFixed(1)) : one(v), height: 220 });
+      Charts.lineChart(has("hk-youth"), { series: [{ id: "HK", label: t("g_youth"), color: "--s-hk", points: pts }], xMin: 2011, xMax: Math.max(...pts.map(p => p.x)) + 1, fmt: (v, a) => a ? String(+v.toFixed(1)) : one(v), height: 220 });
     }
     if (has("tw-deaths")) Charts.barChart(has("tw-deaths"), { bars: overall("TW", "deaths").map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true });
     if (has("mo-annual")) Charts.barChart(has("mo-annual"), { bars: overall("MO", "deaths").map(p => ({ label: String(p.x), value: p.y, note: esc(zh(p, "note")) })), color: "--s-mo", fmt: num, emphasizeLast: true });

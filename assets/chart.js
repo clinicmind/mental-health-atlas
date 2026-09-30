@@ -65,6 +65,7 @@
     const stepX = Math.ceil((x1 - x0) / (W < 600 ? 5 : 11));
     for (let x = Math.ceil(x0); x <= Math.floor(x1); x += stepX) svg.append(txt(X(x), H - 10, x, "middle"));
     const surface = css("--surface");
+    const ends = [];
     opts.series.forEach(s => {
       const pts = [...s.points].sort((a, b) => a.x - b.x);
       const col = css(s.color);
@@ -73,11 +74,12 @@
         svg.append(el("line", { x1: X(a.x), y1: Y(a.y), x2: X(b.x), y2: Y(b.y), stroke: col, "stroke-width": 2.5, "stroke-linecap": "round", "stroke-dasharray": b.x - a.x > 1 ? "4 5" : null }));
       }
       pts.forEach((p, i) => svg.append(el("circle", { cx: X(p.x), cy: Y(p.y), r: i === pts.length - 1 ? 5 : 3.5, fill: p.est ? surface : col, stroke: col, "stroke-width": 2 })));
-      if (pts.length) {
-        const p = pts[pts.length - 1];
-        svg.append(txt(X(p.x) + 9, Y(p.y) + 4, fmt(p.y), "start", "lbl"));
-      }
+      if (pts.length) { const p = pts[pts.length - 1]; ends.push({ x: X(p.x) + 9, y: Y(p.y) + 4, s: fmt(p.y) }); }
     });
+    // Push end labels apart vertically so close values stay readable.
+    ends.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+    ends.forEach(e => svg.append(txt(e.x, e.y, e.s, "start", "lbl")));
     const xh = el("line", { x1: 0, x2: 0, y1: m.t, y2: H - m.b, class: "xh", visibility: "hidden" });
     const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" });
     svg.append(xh, hit);
