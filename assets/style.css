@@ -18,11 +18,17 @@
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #121715; --surface: #1a201e; --ink: #eef2f0; --ink-2: #b9c3bf; --ink-3: #8a9591;
     --line: #2c3431; --grid: #242b28; --accent: #6cc3a8; --help-bg: #1c2b26;
     --s-hk: #3987e5; --s-tw: #d95926; --s-mo: #199e70; color-scheme: dark;
   }
+}
+/* An explicit theme choice on the root element wins over the system setting. */
+:root[data-theme="dark"] {
+    --bg: #121715; --surface: #1a201e; --ink: #eef2f0; --ink-2: #b9c3bf; --ink-3: #8a9591;
+    --line: #2c3431; --grid: #242b28; --accent: #6cc3a8; --help-bg: #1c2b26;
+    --s-hk: #3987e5; --s-tw: #d95926; --s-mo: #199e70; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }

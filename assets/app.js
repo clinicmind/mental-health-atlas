@@ -225,6 +225,7 @@
     resizeTimer = setTimeout(render, 150);
   });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
   applyStaticText();
   load().then(d => { DATA = d; route(); }).catch(() => {
