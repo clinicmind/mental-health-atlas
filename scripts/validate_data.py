@@ -14,9 +14,11 @@ REQUIRED = {
     "sources.csv": ["source_id", "region", "type", "name", "url", "licence", "cadence", "accessed"],
     "suicide.csv": ["region", "year", "sex", "age_group", "measure", "value", "unit", "estimate", "source_id"],
     "services.csv": ["region", "period", "indicator", "group", "value", "unit", "source_id"],
-    "surveys.csv": ["region", "year", "survey", "population", "sample", "indicator", "value", "unit", "source_id"],
+    "surveys.csv": ["region", "year", "survey", "population", "sample", "indicator", "value", "unit", "source_id", "method"],
+    "suicide_quarterly.csv": ["region", "year", "quarter", "deaths", "source_id"],
 }
-NUMERIC = {"suicide.csv": ["year", "value"], "services.csv": ["value"], "surveys.csv": ["sample", "value"]}
+SOURCE_TYPES = {"government", "ngo", "academic", "news"}
+NUMERIC = {"suicide.csv": ["year", "value"], "services.csv": ["value"], "surveys.csv": ["sample", "value"], "suicide_quarterly.csv": ["year", "quarter", "deaths"]}
 
 
 def read(name):
@@ -50,6 +52,8 @@ def main():
                 used.add(row["source_id"])
                 if row["source_id"] not in source_ids:
                     errors.append(f"{where}: source_id '{row['source_id']}' is not in sources.csv")
+            if name == "sources.csv" and row.get("type") not in SOURCE_TYPES:
+                errors.append(f"{where}: type must be one of {sorted(SOURCE_TYPES)}")
             if name == "suicide.csv" and row.get("estimate") not in {"yes", "no"}:
                 errors.append(f"{where}: estimate must be yes or no")
     for sid in sorted(source_ids - used):

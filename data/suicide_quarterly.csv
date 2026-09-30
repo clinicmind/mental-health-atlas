@@ -1,0 +1,12 @@
+region,year,quarter,deaths,male,female,source_id,note
+MO,2022,4,15,,,mdt_2022q4,
+MO,2023,1,23,,,ssm_2024q1,Derived: Q1 2024 was 1 fewer than Q1 2023
+MO,2023,2,24,,,ssm_2024q2,Stated in the Q2 2024 release
+MO,2023,3,15,,,ssm_2024q3,Derived: Q3 2024 was 6 more than Q3 2023
+MO,2023,4,26,20,6,ssm_2023q4,
+MO,2024,1,22,12,10,ssm_2024q1,
+MO,2024,2,22,9,13,ssm_2024q2,
+MO,2024,3,21,10,11,ssm_2024q3,
+MO,2024,4,25,17,8,mpd_2025,
+MO,2025,1,17,,,mb_2025,Derived: Q1 2026 was 2 fewer than Q1 2025
+MO,2026,1,15,,,mb_2025,
