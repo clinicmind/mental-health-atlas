@@ -29,7 +29,7 @@ Opening `index.html` directly from disk will not load the data, because browsers
 ## Adding or correcting a figure
 
 1. Add the source to `data/sources.csv` if it is new (one row, with a short `source_id`).
-2. Add the figure to the right CSV with that `source_id`. Use `estimate=yes` in `suicide.csv` when you calculated the number yourself, and explain how in `note`.
+2. Add the figure to the right CSV with that `source_id`. Use `estimate=yes` in `suicide.csv` when you calculated the number yourself, and explain how in `note`. Put the Chinese version of any note in `note_zh` (and of a source's name in `name_zh`); the site shows it when the page is in 繁中.
 3. Run `python3 scripts/validate_data.py`.
 4. Commit. The same check runs on GitHub.
 
@@ -37,7 +37,7 @@ Opening `index.html` directly from disk will not load the data, because browsers
 
 - News reports are used for figures that officials announce but do not publish as data (for example Macau's yearly suicide totals). They are marked `news` in `sources.csv` and listed on the Sources page.
 
-- Sources sometimes disagree (Macau 2024 is reported as both 90 and 91 suicide deaths). The CSV records the one used and mentions the other in `note`.
+- Sources sometimes disagree (Macau Business put 2024 at 86 while the Health Bureau's quarterly releases add up to 90). The CSV records the one used and mentions the other in `note`.
 - Survey results from different studies measure different things (diagnostic interviews vs symptom screening) and are not comparable across places.
 - WHO datasets usually omit Taiwan and fold Hong Kong and Macau into China, so they are not used for comparisons here.
 - Suicide content follows safe-messaging guidance: no methods or locations, and help lines on every page.

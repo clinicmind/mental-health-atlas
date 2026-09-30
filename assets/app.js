@@ -14,6 +14,8 @@
 
   const t = k => (I18N[state.lang] && I18N[state.lang][k]) || I18N.en[k] || k;
   const tl = s => (state.lang === "zh" && I18N.labels[s]) || s; // data label translation
+  const zh = (d, k) => (state.lang === "zh" && d[k + "_zh"]) || d[k] || ""; // prefer the *_zh column in Chinese
+  const per = p => state.lang === "zh" ? String(p).replace(" to ", " 至 ") : p;
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const region = id => REGIONS.find(r => r.id === id);
   const rname = id => state.lang === "zh" ? region(id).zh : region(id).en;
@@ -54,7 +56,7 @@
   }
 
   const src = id => DATA.sourceById[id] || { name: id, url: "#", type: "" };
-  const srcLink = id => { const s = src(id); return `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`; };
+  const srcLink = id => { const s = src(id); return `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(zh(s, "name"))}</a>`; };
   const srcBadge = id => { const s = src(id); return s.type ? `<span class="type t-${s.type}">${t(s.type)}</span>` : ""; };
   const cite = ids => `<p class="cite">${t("source_label")}：${[...new Set(ids)].map(i => `${srcBadge(i)} ${srcLink(i)}`).join("；")}</p>`;
 
@@ -152,7 +154,7 @@
   const valueCell = d => `<span class="num">${d.measure === "deaths" || d.measure === "attempt_notifications" ? num(d.value) : one(d.value)}</span>${d.estimate === "yes" ? ` <span class="est">${t("est")}</span>` : ""}`;
 
   // ---------- chart data helpers ----------
-  const quarterBars = () => DATA.suicide_quarterly.map(q => ({ label: `${q.year} Q${q.quarter}`, value: +q.deaths, color: "--s-mo", note: q.note ? esc(q.note) : "" }));
+  const quarterBars = () => DATA.suicide_quarterly.map(q => ({ label: `${q.year} Q${q.quarter}`, value: +q.deaths, color: "--s-mo", note: esc(zh(q, "note")) }));
   const hkNewCases = () => DATA.services.filter(d => d.region === "HK" && d.indicator === "psychiatric_new_cases");
   const twNotif = () => overall("TW", "attempt_notifications");
 
@@ -198,7 +200,7 @@
           ${card("mo-quarter", t("mo_q_title"), t("mo_q_sub"), null, cite(DATA.suicide_quarterly.map(q => q.source_id)))}
         </div>
         ${details(t("all_figures"), table(["col_region", "col_year", "col_group", "col_measure", "col_value", "col_note", "col_source"], all.map(d => [
-          rname(d.region), d.year, `${t(d.sex)} · ${tl(d.age_group)}`, t("m_" + d.measure), valueCell(d), esc(d.note), `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4]))}`;
+          rname(d.region), d.year, `${t(d.sex)} · ${tl(d.age_group)}`, t("m_" + d.measure), valueCell(d), esc(zh(d, "note")), `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4]))}`;
     },
     services() {
       return `<p class="lead">${t("services_lead")}</p>
@@ -209,13 +211,13 @@
         <div class="grid2">
           ${card("tw-cap", t("tw_cap_title"), t("tw_cap_sub"), null, cite(["udn_mohw_2026"]))}
           ${card("hotlines", t("hotline_title"), t("hotline_sub"), `<div class="stats">
-            ${DATA.services.filter(d => d.indicator === "hotline_calls").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${esc(tl(d.group))}</span><span class="s">${esc(d.period)}${d.note ? " · " + esc(tl(d.note)) : ""}</span></div>`).join("")}
-            ${DATA.services.filter(d => d.indicator === "people_treated").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${t("people_treated")}</span><span class="s">${esc(d.period)}</span></div>`).join("")}
+            ${DATA.services.filter(d => d.indicator === "hotline_calls").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${esc(tl(d.group))}</span><span class="s">${esc(per(d.period))}${d.note ? " · " + esc(zh(d, "note")) : ""}</span></div>`).join("")}
+            ${DATA.services.filter(d => d.indicator === "people_treated").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${t("people_treated")}</span><span class="s">${esc(per(d.period))}</span></div>`).join("")}
           </div>`, cite(DATA.services.filter(d => d.indicator === "hotline_calls" || d.indicator === "people_treated").map(d => d.source_id)))}
         </div>
         <p class="note gap">${t("mo_services_gap")}</p>
         ${details(t("all_figures"), table(["col_region", "col_period", "col_indicator", "col_group", "col_value", "col_note", "col_source"],
-          DATA.services.map(d => [rname(d.region), esc(d.period), t(d.indicator), esc(tl(d.group)), `<span class="num">${num(d.value)}</span>`, esc(d.note), `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4]))}`;
+          DATA.services.map(d => [rname(d.region), esc(per(d.period)), t(d.indicator), esc(tl(d.group)), `<span class="num">${num(d.value)}</span>`, esc(zh(d, "note")), `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4]))}`;
     },
     surveys() {
       return `<p class="lead">${t("surveys_lead")}</p>
@@ -241,7 +243,7 @@
           <div class="bar"><h2>${t("all_sources")}</h2>
             <div class="seg" role="group" aria-label="${t("col_type")}">${["all", ...types].map(ty => `<button type="button" data-srctype="${ty}" aria-pressed="${state.srcType === ty}">${t(ty === "all" ? "all_types" : ty)}</button>`).join("")}</div>
           </div>
-          ${table(["col_region", "col_type", "col_source", "col_date", "col_licence", "col_cadence"], list.map(s => [rname(s.region), srcBadge(s.source_id), srcLink(s.source_id), `<span class="num">${esc(s.published)}</span>`, esc(s.licence), esc(s.cadence)]))}
+          ${table(["col_region", "col_type", "col_source", "col_date", "col_licence", "col_cadence"], list.map(s => [rname(s.region), srcBadge(s.source_id), srcLink(s.source_id), `<span class="num">${esc(s.published)}</span>`, esc(tl(s.licence)), esc(tl(s.cadence))]))}
         </section>`;
     },
   };
@@ -254,7 +256,7 @@
     if (has("ov-tw")) Charts.barChart(has("ov-tw"), { bars: twN.map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true, aria: t("tw_notif_title") });
     if (has("tw-notif")) Charts.barChart(has("tw-notif"), { bars: twN.map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true, aria: t("tw_notif_title") });
     ["ov-mo", "mo-quarter"].forEach(id => has(id) && Charts.barChart(has(id), { bars: quarterBars(), color: "--s-mo", fmt: num, emphasizeLast: true, aria: t("mo_q_title") }));
-    ["ov-hk", "hk-cases"].forEach(id => has(id) && Charts.barChart(has(id), { bars: hkNewCases().map(d => ({ label: d.period, value: +d.value, note: esc(d.note) })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_cases_title") }));
+    ["ov-hk", "hk-cases"].forEach(id => has(id) && Charts.barChart(has(id), { bars: hkNewCases().map(d => ({ label: d.period, value: +d.value, note: esc(zh(d, "note")) })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_cases_title") }));
     if (has("ov-surveys")) Charts.hbarChart(has("ov-surveys"), { rows: surveyRows(), max: 100, fmt: v => v + "%", aria: t("survey_title") });
     REGIONS.forEach(R => has("sv-" + R.id) && Charts.hbarChart(has("sv-" + R.id), { rows: surveyRows(R.id), max: 100, fmt: v => v + "%" }));
     if (has("hk-groups")) {
@@ -266,9 +268,9 @@
       Charts.lineChart(has("hk-youth"), { series: [{ id: "HK", label: t("g_youth"), color: "--s-hk", points: pts }], xMin: 2011, xMax: 2022, fmt: (v, a) => a ? String(+v.toFixed(1)) : one(v), height: 220 });
     }
     if (has("tw-deaths")) Charts.barChart(has("tw-deaths"), { bars: overall("TW", "deaths").map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true });
-    if (has("mo-annual")) Charts.barChart(has("mo-annual"), { bars: overall("MO", "deaths").map(p => ({ label: String(p.x), value: p.y, note: esc(p.note) })), color: "--s-mo", fmt: num, emphasizeLast: true });
-    if (has("tw-cap")) Charts.hbarChart(has("tw-cap"), { rows: DATA.services.filter(d => d.region === "TW" && ["psychiatric_beds", "rehab_places"].includes(d.indicator)).map(d => ({ label: `${t(d.indicator)} · ${tl(d.group)}`, value: +d.value, color: "--s-tw", sub: esc(d.note) })), fmt: num });
-    if (has("hk-wait")) Charts.hbarChart(has("hk-wait"), { rows: DATA.services.filter(d => d.region === "HK" && d.indicator === "routine_wait_weeks").map(d => ({ label: tl(d.group), value: +d.value, color: "--s-hk", sub: esc(d.note) })), fmt: v => `${v} ${t("weeks")}` });
+    if (has("mo-annual")) Charts.barChart(has("mo-annual"), { bars: overall("MO", "deaths").map(p => ({ label: String(p.x), value: p.y, note: esc(zh(p, "note")) })), color: "--s-mo", fmt: num, emphasizeLast: true });
+    if (has("tw-cap")) Charts.hbarChart(has("tw-cap"), { rows: DATA.services.filter(d => d.region === "TW" && ["psychiatric_beds", "rehab_places"].includes(d.indicator)).map(d => ({ label: `${t(d.indicator)} · ${tl(d.group)}`, value: +d.value, color: "--s-tw", sub: esc(zh(d, "note")) })), fmt: num });
+    if (has("hk-wait")) Charts.hbarChart(has("hk-wait"), { rows: DATA.services.filter(d => d.region === "HK" && d.indicator === "routine_wait_weeks").map(d => ({ label: tl(d.group), value: +d.value, color: "--s-hk", sub: esc(zh(d, "note")) })), fmt: v => `${v} ${t("weeks")}` });
     document.querySelectorAll("[data-srctype]").forEach(b => b.addEventListener("click", () => { state.srcType = b.dataset.srctype; render(); }));
   }
 

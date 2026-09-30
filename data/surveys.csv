@@ -1,11 +1,11 @@
-region,year,survey,population,sample,indicator,value,unit,source_id,note,method
-HK,2022-2024,World Mental Health Hong Kong (HKU),adults 18+,3053,any mental disorder past 12 months,10.6,%,wmhhk_2025,Diagnostic interview (DSM-5),diagnostic
-HK,2022-2024,World Mental Health Hong Kong (HKU),adults 18+,3053,anxiety disorder past 12 months,8.0,%,wmhhk_2025,Diagnostic interview (DSM-5),diagnostic
-HK,2022-2024,World Mental Health Hong Kong (HKU),adults 18+,3053,mood disorder past 12 months,4.3,%,wmhhk_2025,Diagnostic interview (DSM-5),diagnostic
-HK,2025,Hong Kong Depression Index (CUHK and MHAHK),residents,2695,moderate to severe depression symptoms,29.9,%,cuhk_dep_2025,PHQ-9 screening; convenience sample,screening
-HK,2025,Hong Kong Depression Index (CUHK and MHAHK),residents,2695,moderate to severe anxiety symptoms,22.6,%,cuhk_dep_2025,GAD-7 screening; convenience sample,screening
-HK,2025,Mind HK and Manulife study,adults 18+,1000,mild or worse depression or anxiety symptoms,46,%,mindhk_2025,Screening questionnaire,screening
-TW,2025,Adolescent Mental Health Survey (Children's Welfare League),secondary students,7007,moderate or higher emotional distress,17.7,%,cwlf_2025,,screening
-TW,2025,Adolescent Mental Health Survey (Children's Welfare League),secondary students,7007,moderate or higher suicidal ideation,10.8,%,cwlf_2025,,screening
-MO,2023,Secondary student mental health survey (USJ),secondary students,1655,anxious most or all of the time,10,%,usj_students_2023,Reported as over one in ten,screening
-MO,2024,Macau Youth Indicators,age 13-35,2350,resilience score (1-5),3.55,score,mo_youth_2024,,scale
+region,year,survey,population,sample,indicator,value,unit,source_id,note,note_zh,method
+HK,2022-2024,World Mental Health Hong Kong (HKU),adults 18+,3053,any mental disorder past 12 months,10.6,%,wmhhk_2025,Diagnostic interview (DSM-5),診斷訪談（DSM-5）,diagnostic
+HK,2022-2024,World Mental Health Hong Kong (HKU),adults 18+,3053,anxiety disorder past 12 months,8.0,%,wmhhk_2025,Diagnostic interview (DSM-5),診斷訪談（DSM-5）,diagnostic
+HK,2022-2024,World Mental Health Hong Kong (HKU),adults 18+,3053,mood disorder past 12 months,4.3,%,wmhhk_2025,Diagnostic interview (DSM-5),診斷訪談（DSM-5）,diagnostic
+HK,2025,Hong Kong Depression Index (CUHK and MHAHK),residents,2695,moderate to severe depression symptoms,29.9,%,cuhk_dep_2025,PHQ-9 screening; convenience sample,PHQ-9 篩查；方便抽樣,screening
+HK,2025,Hong Kong Depression Index (CUHK and MHAHK),residents,2695,moderate to severe anxiety symptoms,22.6,%,cuhk_dep_2025,GAD-7 screening; convenience sample,GAD-7 篩查；方便抽樣,screening
+HK,2025,Mind HK and Manulife study,adults 18+,1000,mild or worse depression or anxiety symptoms,46,%,mindhk_2025,Screening questionnaire,篩查問卷,screening
+TW,2025,Adolescent Mental Health Survey (Children's Welfare League),secondary students,7007,moderate or higher emotional distress,17.7,%,cwlf_2025,,,screening
+TW,2025,Adolescent Mental Health Survey (Children's Welfare League),secondary students,7007,moderate or higher suicidal ideation,10.8,%,cwlf_2025,,,screening
+MO,2023,Secondary student mental health survey (USJ),secondary students,1655,anxious most or all of the time,10,%,usj_students_2023,Reported as over one in ten,報告稱超過十分之一,screening
+MO,2024,Macau Youth Indicators,age 13-35,2350,resilience score (1-5),3.55,score,mo_youth_2024,,,scale

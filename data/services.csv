@@ -1,12 +1,12 @@
-region,period,indicator,group,value,unit,source_id,note,highlight
-HK,2022/23,psychiatric_new_cases,age 0-29,15492,cases,legco_2025_10,35% of all new psychiatric outpatient cases,no
-HK,2023/24,psychiatric_new_cases,age 0-29,17260,cases,legco_2025_10,39% of all new cases,no
-HK,2024/25,psychiatric_new_cases,age 0-29,18143,cases,legco_2025_10,39% of all new cases,yes
-HK,2024/25,routine_wait_weeks,children and adolescents,77,weeks,legco_2025_10,Wait for routine (stable) new cases,yes
-HK,2024/25,routine_wait_weeks,adults,21,weeks,legco_2025_10,Wait for routine (stable) new cases,yes
-HK,2023-12 to 2025-09,hotline_calls,18111 Mental Health Support Hotline,208000,calls,legco_2025_10,About 330 calls a day,no
-TW,2025,people_treated,mental illness (all),1702000,people,udn_mohw_2026,,yes
-TW,2026-05,psychiatric_beds,acute,7248,beds,udn_mohw_2026,,no
-TW,2026-05,psychiatric_beds,chronic,12701,beds,udn_mohw_2026,,no
-TW,2026-05,rehab_places,community psychiatric rehabilitation,13114,places,udn_mohw_2026,301 facilities,yes
-MO,2024,hotline_calls,Social Welfare Bureau 24-hour counselling hotline,1475,calls,mo_yearbook_2024,,yes
+region,period,indicator,group,value,unit,source_id,note,note_zh,highlight
+HK,2022/23,psychiatric_new_cases,age 0-29,15492,cases,legco_2025_10,35% of all new psychiatric outpatient cases,佔精神科專科門診新症 35%,no
+HK,2023/24,psychiatric_new_cases,age 0-29,17260,cases,legco_2025_10,39% of all new cases,佔所有新症 39%,no
+HK,2024/25,psychiatric_new_cases,age 0-29,18143,cases,legco_2025_10,39% of all new cases,佔所有新症 39%,yes
+HK,2024/25,routine_wait_weeks,children and adolescents,77,weeks,legco_2025_10,Wait for routine (stable) new cases,穩定新症的輪候時間,yes
+HK,2024/25,routine_wait_weeks,adults,21,weeks,legco_2025_10,Wait for routine (stable) new cases,穩定新症的輪候時間,yes
+HK,2023-12 to 2025-09,hotline_calls,18111 Mental Health Support Hotline,208000,calls,legco_2025_10,About 330 calls a day,每日約 330 個來電,no
+TW,2025,people_treated,mental illness (all),1702000,people,udn_mohw_2026,,,yes
+TW,2026-05,psychiatric_beds,acute,7248,beds,udn_mohw_2026,,,no
+TW,2026-05,psychiatric_beds,chronic,12701,beds,udn_mohw_2026,,,no
+TW,2026-05,rehab_places,community psychiatric rehabilitation,13114,places,udn_mohw_2026,301 facilities,共 301 間機構,yes
+MO,2024,hotline_calls,Social Welfare Bureau 24-hour counselling hotline,1475,calls,mo_yearbook_2024,,,yes

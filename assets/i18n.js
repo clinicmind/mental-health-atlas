@@ -163,6 +163,14 @@ window.I18N = {
     "World Mental Health Hong Kong (HKU)": "香港世界精神健康調查（港大）", "Hong Kong Depression Index (CUHK and MHAHK)": "香港抑鬱指數（中大及香港心理衞生會）",
     "Mind HK and Manulife study": "Mind HK 與宏利研究", "Adolescent Mental Health Survey (Children's Welfare League)": "台灣青少年心理健康調查（兒福聯盟）",
     "Secondary student mental health survey (USJ)": "澳門中學生精神健康調查（聖若瑟大學）", "Macau Youth Indicators": "澳門青年指標",
-    "adults 18+": "18歲或以上成人", "residents": "市民", "secondary students": "中學生", "age 13-35": "13至35歲"
+    "adults 18+": "18歲或以上成人", "residents": "市民", "secondary students": "中學生", "age 13-35": "13至35歲",
+    "Check before reuse": "轉用前請先確認", "Government open data": "政府開放資料", "Government publication": "政府刊物",
+    "Government-commissioned report": "政府委託報告", "Journal article": "期刊論文", "NGO report": "非政府組織報告",
+    "News report": "新聞報道", "News report of government data": "引用政府數據的新聞報道",
+    "Open Government Data License 1.0": "政府資料開放授權條款 1.0", "Press release": "新聞稿",
+    "Research project; check before reuse": "研究計劃；轉用前請先確認", "University publication": "大學刊物",
+    "University publication; request extract": "大學刊物；需申請數據",
+    "Ad hoc": "不定期", "Continuous": "持續更新", "One-off": "一次性", "Periodic": "定期",
+    "Quarterly": "每季", "Yearly": "每年", "Yearly (June)": "每年（6 月）", "Yearly (September)": "每年（9 月）"
   }
 };
