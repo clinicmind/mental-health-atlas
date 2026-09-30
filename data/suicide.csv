@@ -1,0 +1,22 @@
+region,year,sex,age_group,measure,value,unit,estimate,source_id,note
+HK,2017,all,all,crude_rate,13.0,per 100000,no,csrp_2024,
+HK,2023,all,all,crude_rate,13.5,per 100000,no,csrp_2025,CSRP 2024 release gave 13.6
+HK,2024,all,all,crude_rate,14.1,per 100000,no,csrp_2025,
+HK,2024,all,all,age_std_rate,10.6,per 100000,no,csrp_2025,
+HK,2021,male,25-39,crude_rate,10.0,per 100000,no,csrp_2025,
+HK,2024,male,25-39,crude_rate,14.4,per 100000,no,csrp_2025,
+TW,2020,all,all,deaths,3656,deaths,no,tsos,
+TW,2020,all,all,crude_rate,15.5,per 100000,no,tsos,
+TW,2020,all,all,age_std_rate,11.8,per 100000,no,tsos,
+TW,2023,all,all,deaths,3898,deaths,no,tw_news_2024,Derived: 2024 total minus reported rise of 164
+TW,2023,all,all,crude_rate,16.6,per 100000,yes,tw_news_2024,Deaths / population of about 23.4 million
+TW,2024,all,all,deaths,4062,deaths,no,tw_news_2024,
+TW,2024,all,all,crude_rate,17.4,per 100000,yes,tw_news_2024,Deaths / population of about 23.4 million
+TW,2024,all,65+,crude_rate,25.5,per 100000,no,tw_news_2024,
+MO,2022,all,all,deaths,80,deaths,no,mdt_2023,
+MO,2022,all,all,crude_rate,11.9,per 100000,yes,mdt_2023,Deaths / population of about 672000
+MO,2023,all,all,deaths,88,deaths,no,mdt_2023,Macau Business reports 86
+MO,2023,all,all,crude_rate,12.9,per 100000,yes,mdt_2023,Deaths / population of about 684000
+MO,2023,male,all,deaths,57,deaths,no,mdt_2023,
+MO,2024,all,all,deaths,91,deaths,no,mb_2025,Macau Daily Times reports 90
+MO,2024,all,all,crude_rate,13.2,per 100000,yes,mb_2025,Deaths / population of about 689000
