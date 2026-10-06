@@ -241,6 +241,7 @@
           <div><h2>${t("news_title")}</h2><p class="sub">${t("news_sub")}</p></div>
           <ol class="timeline">${news.map(s => `<li><span class="when num">${esc(s.published)}</span>${dot(region(s.region).color)}<span>${srcLink(s.source_id)}</span></li>`).join("")}</ol>
           <p class="note">${t("hkspd_note")} <a href="https://hkspd.siuyeong.com/" target="_blank" rel="noopener">hkspd.siuyeong.com</a></p>
+          <div class="panel"><h3>${t("hkspd_use_title")}</h3><p class="note">${t("hkspd_use_1")}</p><p class="note">${t("hkspd_use_2")}</p><p class="note">${t("hkspd_use_3")}</p></div>
         </section>
         <section class="panel">
           <div class="bar"><h2>${t("all_sources")}</h2>

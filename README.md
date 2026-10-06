@@ -45,3 +45,7 @@ Opening `index.html` directly from disk will not load the data, because browsers
 ## Help lines
 
 Hong Kong 18111 · Samaritan Befrienders 2389 2222 · Taiwan 1925 · Macau Caritas Life Hope Hotline 2852 5222
+
+## HKSPD news-report counts
+
+`scripts/fetch_hkspd.py` turns the Hong Kong Suicide Press Database CSV into monthly counts by sex, age band and outcome (`data/hk_press_monthly.csv`). It never reads method, location, name or reason columns. The cloud sandbox cannot reach the database, so run it on a machine with internet access, then add the output and a chart. These are media-report counts, not official statistics; follow the usage and citation terms shown on the site's Sources page.
