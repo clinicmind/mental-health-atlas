@@ -209,6 +209,9 @@
           ${card("hk-wait", t("hk_wait_title"), t("hk_wait_sub"), null, cite(["legco_2025_10"]))}
         </div>
         <div class="grid2">
+          ${card("hk-att", t("hk_att_title"), t("hk_att_sub"), null, cite(["legco_2025_10"]))}
+        </div>
+        <div class="grid2">
           ${card("tw-cap", t("tw_cap_title"), t("tw_cap_sub"), null, cite(["udn_mohw_2026"]))}
           ${card("hotlines", t("hotline_title"), t("hotline_sub"), `<div class="stats">
             ${DATA.services.filter(d => d.indicator === "hotline_calls").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${esc(tl(d.group))}</span><span class="s">${esc(per(d.period))}${d.note ? " · " + esc(zh(d, "note")) : ""}</span></div>`).join("")}
@@ -270,6 +273,7 @@
     if (has("tw-deaths")) Charts.barChart(has("tw-deaths"), { bars: overall("TW", "deaths").map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true });
     if (has("mo-annual")) Charts.barChart(has("mo-annual"), { bars: overall("MO", "deaths").map(p => ({ label: String(p.x), value: p.y, note: esc(zh(p, "note")) })), color: "--s-mo", fmt: num, emphasizeLast: true });
     if (has("tw-cap")) Charts.hbarChart(has("tw-cap"), { rows: DATA.services.filter(d => d.region === "TW" && ["psychiatric_beds", "rehab_places"].includes(d.indicator)).map(d => ({ label: `${t(d.indicator)} · ${tl(d.group)}`, value: +d.value, color: "--s-tw", sub: esc(zh(d, "note")) })), fmt: num });
+    if (has("hk-att")) Charts.barChart(has("hk-att"), { bars: DATA.services.filter(d => d.region === "HK" && d.indicator === "psychiatric_attendances").map(d => ({ label: d.period, value: +d.value })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_att_title") });
     if (has("hk-wait")) Charts.hbarChart(has("hk-wait"), { rows: DATA.services.filter(d => d.region === "HK" && d.indicator === "routine_wait_weeks").map(d => ({ label: tl(d.group), value: +d.value, color: "--s-hk", sub: esc(zh(d, "note")) })), fmt: v => `${v} ${t("weeks")}` });
     document.querySelectorAll("[data-srctype]").forEach(b => b.addEventListener("click", () => { state.srcType = b.dataset.srctype; render(); }));
   }

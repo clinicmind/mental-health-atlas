@@ -10,3 +10,7 @@ TW,2026-05,psychiatric_beds,acute,7248,beds,udn_mohw_2026,,,no
 TW,2026-05,psychiatric_beds,chronic,12701,beds,udn_mohw_2026,,,no
 TW,2026-05,rehab_places,community psychiatric rehabilitation,13114,places,udn_mohw_2026,301 facilities,共 301 間機構,yes
 MO,2024,hotline_calls,Social Welfare Bureau 24-hour counselling hotline,1475,calls,mo_yearbook_2024,,,yes
+HK,2022/23,psychiatric_attendances,all ages,967199,attendances,legco_2025_10,"Hospital Authority specialist outpatient attendances (visits, not patients)",醫院管理局精神科專科門診求診人次（非人數）,no
+HK,2023/24,psychiatric_attendances,all ages,978959,attendances,legco_2025_10,"Hospital Authority specialist outpatient attendances (visits, not patients)",醫院管理局精神科專科門診求診人次（非人數）,no
+HK,2024/25,psychiatric_attendances,all ages,1024287,attendances,legco_2025_10,"Hospital Authority specialist outpatient attendances (visits, not patients)",醫院管理局精神科專科門診求診人次（非人數）,no
+MO,2024,psychiatric_attendances,all ages,50597,attendances,alm_2025_ho,Psychiatric outpatient attendances stated in a legislator's written question,立法會議員書面質詢所載精神科門診求診人次,no
