@@ -51,6 +51,8 @@
     const texts = await Promise.all(names.map(n => fetch(`data/${n}.csv`).then(r => { if (!r.ok) throw new Error(n); return r.text(); })));
     const d = {};
     names.forEach((n, i) => { d[n] = parseCSV(texts[i]); });
+    // Optional: monthly news-report counts from scripts/fetch_hkspd.py. The site works without it.
+    try { const r = await fetch("data/hk_press_monthly.csv"); d.hk_press = r.ok ? parseCSV(await r.text()) : []; } catch (e) { d.hk_press = []; }
     d.sourceById = Object.fromEntries(d.sources.map(s => [s.source_id, s]));
     return d;
   }
@@ -198,6 +200,7 @@
         <div class="grid2">
           ${card("mo-annual", t("mo_annual_title"), t("mo_annual_sub"), null, cite(moAnnual.map(d => d.source_id)))}
           ${card("mo-quarter", t("mo_q_title"), t("mo_q_sub"), null, cite(DATA.suicide_quarterly.map(q => q.source_id)))}
+          ${DATA.hk_press.length ? card("hk-press", t("hk_press_title"), t("hk_press_sub"), null, cite(["hkspd"]) + `<p class="note">${t("hkspd_use_1")}</p>`) : ""}
         </div>
         ${details(t("all_figures"), table(["col_region", "col_year", "col_group", "col_measure", "col_value", "col_note", "col_source"], all.map(d => [
           rname(d.region), d.year, `${t(d.sex)} · ${tl(d.age_group)}`, t("m_" + d.measure), valueCell(d), esc(zh(d, "note")), `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4]))}`;
@@ -274,6 +277,12 @@
     if (has("tw-deaths")) Charts.barChart(has("tw-deaths"), { bars: overall("TW", "deaths").map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true });
     if (has("mo-annual")) Charts.barChart(has("mo-annual"), { bars: overall("MO", "deaths").map(p => ({ label: String(p.x), value: p.y, note: esc(zh(p, "note")) })), color: "--s-mo", fmt: num, emphasizeLast: true });
     if (has("tw-cap")) Charts.hbarChart(has("tw-cap"), { rows: DATA.services.filter(d => d.region === "TW" && ["psychiatric_beds", "rehab_places"].includes(d.indicator)).map(d => ({ label: `${t(d.indicator)} · ${tl(d.group)}`, value: +d.value, color: "--s-tw", sub: esc(zh(d, "note")) })), fmt: num });
+    if (has("hk-press")) {
+      const byMonth = {};
+      DATA.hk_press.forEach(r => { byMonth[r.month] = (byMonth[r.month] || 0) + (+r.reports || 0); });
+      const months = Object.keys(byMonth).sort().slice(-24);
+      Charts.barChart(has("hk-press"), { bars: months.map(m => ({ label: m, value: byMonth[m] })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_press_title") });
+    }
     if (has("hk-att")) Charts.barChart(has("hk-att"), { bars: DATA.services.filter(d => d.region === "HK" && d.indicator === "psychiatric_attendances").map(d => ({ label: d.period, value: +d.value })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_att_title") });
     if (has("hk-wait")) Charts.hbarChart(has("hk-wait"), { rows: DATA.services.filter(d => d.region === "HK" && d.indicator === "routine_wait_weeks").map(d => ({ label: tl(d.group), value: +d.value, color: "--s-hk", sub: esc(zh(d, "note")) })), fmt: v => `${v} ${t("weeks")}` });
     document.querySelectorAll("[data-srctype]").forEach(b => b.addEventListener("click", () => { state.srcType = b.dataset.srctype; render(); }));
