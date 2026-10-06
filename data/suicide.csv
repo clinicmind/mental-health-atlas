@@ -80,12 +80,12 @@ MO,2019,all,all,deaths,66,deaths,no,ucanews_2024,,
 MO,2021,all,all,deaths,60,deaths,no,ucanews_2024,,
 MO,2022,all,all,deaths,80,deaths,no,mdt_2023,,
 MO,2023,all,all,deaths,88,deaths,no,mdt_2023,Sum of the four Health Bureau quarterly releases,衛生局四季公布數字之和
-MO,2024,all,all,deaths,90,deaths,no,mdt_2024,Sum of the four Health Bureau quarterly releases (22+22+21+25); AAMacau reported 91,衛生局四季公布數字之和（22+22+21+25）；論盡媒體報道為 91 宗
+MO,2024,all,all,deaths,90,deaths,no,mdt_2024,Sum of the four Health Bureau quarterly releases (22+22+21+25). A May 2025 Legislative Assembly inquiry and AAMacau report 91,衛生局四季公布數字之和（22+22+21+25）。2025 年 5 月立法會質詢及論盡媒體報道為 91 宗
 MO,2025,all,all,deaths,91,deaths,no,mb_2025,"Same article implies 86 for 2024, which does not match the quarterly releases",同一報道推算 2024 年為 86 宗，與季度公布數字不符
 MO,2022,all,all,crude_rate,11.9,per 100000,yes,mdt_2023,"Deaths / population of about 672,000","死亡人數 ÷ 人口約 672,000"
 MO,2023,all,all,crude_rate,12.9,per 100000,yes,mdt_2023,"Deaths / population of about 684,000","死亡人數 ÷ 人口約 684,000"
 MO,2024,all,all,crude_rate,13.1,per 100000,yes,mdt_2024,"Deaths / population of about 688,000","死亡人數 ÷ 人口約 688,000"
-MO,2025,all,all,crude_rate,13.2,per 100000,yes,mb_2025,"Deaths / population of 689,000 given in the article","死亡人數 ÷ 報道所載人口 689,000"
+MO,2025,all,all,crude_rate,13.2,per 100000,yes,mb_2025,"Deaths / DSEC end-2025 population of 688,900","死亡人數 ÷ 統計暨普查局 2025 年底人口 688,900"
 MO,2023,male,all,deaths,57,deaths,no,mdt_2023,,
 HK,2018,all,all,crude_rate,12.2,per 100000,no,csrp_2019,Estimated by CSRP,防止自殺研究中心估算
 HK,2022,all,all,crude_rate,14.5,per 100000,no,csrp_2023,,
