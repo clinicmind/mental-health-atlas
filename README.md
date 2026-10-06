@@ -13,6 +13,7 @@ Every figure on the site links to its source. Figures that were calculated rathe
 | `data/suicide_quarterly.csv` | Macau suicide deaths per quarter from Health Bureau releases |
 | `data/services.csv` | Service use: psychiatric caseload, waiting times, beds, hotline calls. `highlight=yes` rows appear on the overview. |
 | `data/surveys.csv` | Survey results (prevalence and symptom screening) |
+| `data/update_calendar.csv` | Which sources are due each month; a GitHub Action opens a reminder issue on the 1st |
 | `data/sources.csv` | Every source: type (government, NGO, academic, news), name, link, licence, update frequency, publication date, date accessed |
 | `scripts/validate_data.py` | Checks the CSV files; runs automatically on every push |
 | `scripts/fetch_taiwan_deaths.py` | Summarises Taiwan's open cause-of-death data into suicide deaths per year |

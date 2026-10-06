@@ -60,7 +60,11 @@
   const src = id => DATA.sourceById[id] || { name: id, url: "#", type: "" };
   const srcLink = id => { const s = src(id); return `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(zh(s, "name"))}</a>`; };
   const srcBadge = id => { const s = src(id); return s.type ? `<span class="type t-${s.type}">${t(s.type)}</span>` : ""; };
-  const cite = ids => `<p class="cite">${t("source_label")}：${[...new Set(ids)].map(i => `${srcBadge(i)} ${srcLink(i)}`).join("；")}</p>`;
+  const cite = (ids, file) => {
+    const uniq = [...new Set(ids)];
+    const asof = uniq.map(i => src(i).accessed || "").sort().pop();
+    return `<p class="cite">${t("source_label")}：${uniq.map(i => `${srcBadge(i)} ${srcLink(i)}`).join("；")}${asof ? ` · ${t("data_asof")} ${esc(asof.slice(0, 7))}` : ""}${file ? ` · <a class="dl" href="data/${file}" download>${t("download_data")}</a>` : ""}</p>`;
+  };
 
   const suicide = (f) => DATA.suicide.filter(d => Object.entries(f).every(([k, v]) => d[k] === v));
   const overall = (r, m) => suicide({ region: r, sex: "all", age_group: "all", measure: m }).map(d => ({ ...d, y: +d.value, x: +d.year })).sort((a, b) => a.x - b.x);
@@ -128,7 +132,7 @@
       fmt: (v, axis) => m === "deaths" ? num(Math.round(v)) : (axis ? String(+v.toFixed(1)) : one(v)),
       estLabel: t("est"), noFigure: t("no_figure"), aria: t("trend_title"),
     });
-    document.getElementById("trend-cite").innerHTML = cite(ids);
+    document.getElementById("trend-cite").innerHTML = cite(ids, "suicide.csv");
   }
 
   function bindTrend() {
@@ -178,11 +182,11 @@
         <section><div class="sec-head"><h2>${t("latest_rate")}</h2><p class="sub">${t("latest_rate_sub")}</p></div>${tilesHTML()}</section>
         ${trendCard()}
         <div class="grid3">
-          ${card("ov-tw", t("tw_notif_title"), t("tw_notif_sub").replace("{g}", growth), null, cite(pct.map(p => p.source_id)))}
-          ${card("ov-mo", t("mo_q_title"), t("mo_q_sub"), null, cite(DATA.suicide_quarterly.map(q => q.source_id)))}
-          ${card("ov-hk", t("hk_cases_title"), t("hk_cases_sub"), null, cite(hkNewCases().map(d => d.source_id)))}
+          ${card("ov-tw", t("tw_notif_title"), t("tw_notif_sub").replace("{g}", growth), null, cite(pct.map(p => p.source_id), "suicide.csv"))}
+          ${card("ov-mo", t("mo_q_title"), t("mo_q_sub"), null, cite(DATA.suicide_quarterly.map(q => q.source_id), "suicide_quarterly.csv"))}
+          ${card("ov-hk", t("hk_cases_title"), t("hk_cases_sub"), null, cite(hkNewCases().map(d => d.source_id), "services.csv"))}
         </div>
-        ${card("ov-surveys", t("survey_title"), t("survey_sub"), `<div class="legend static">${["diagnostic", "screening"].map(m => `<span>${dot("--m-" + m)}${t("method_" + m)}</span>`).join("")}</div><div class="chartwrap" id="ov-surveys"></div>`, cite(DATA.surveys.filter(d => d.unit === "%").map(d => d.source_id)))}`;
+        <p class="note">${t("ov_surveys_moved")} <a href="#surveys">${t("tab_surveys")}</a></p>`;
     },
     suicide() {
       const moAnnual = overall("MO", "deaths");
@@ -190,17 +194,17 @@
       return `<p class="lead">${t("suicide_lead")}</p>
         ${trendCard()}
         <div class="grid2">
-          ${card("hk-groups", t("hk_groups_title"), t("hk_groups_sub"), null, cite(["csrp_2022"]))}
-          ${card("hk-youth", t("hk_youth_title"), t("hk_youth_sub"), null, cite(suicide({ region: "HK", age_group: "15-24" }).map(d => d.source_id)))}
+          ${card("hk-groups", t("hk_groups_title"), t("hk_groups_sub"), null, cite(["csrp_2022"], "suicide.csv"))}
+          ${card("hk-youth", t("hk_youth_title"), t("hk_youth_sub"), null, cite(suicide({ region: "HK", age_group: "15-24" }).map(d => d.source_id), "suicide.csv"))}
         </div>
         <div class="grid2">
-          ${card("tw-deaths", t("tw_deaths_title"), t("tw_deaths_sub"), null, cite(["mohw_suicide"]))}
-          ${card("tw-notif", t("tw_notif_title"), t("tw_notif_sub2"), null, cite(["mohw_suicide"]))}
+          ${card("tw-deaths", t("tw_deaths_title"), t("tw_deaths_sub"), null, cite(["mohw_suicide"], "suicide.csv"))}
+          ${card("tw-notif", t("tw_notif_title"), t("tw_notif_sub2"), null, cite(["mohw_suicide"], "suicide.csv"))}
         </div>
         <div class="grid2">
-          ${card("mo-annual", t("mo_annual_title"), t("mo_annual_sub"), null, cite(moAnnual.map(d => d.source_id)))}
-          ${card("mo-quarter", t("mo_q_title"), t("mo_q_sub"), null, cite(DATA.suicide_quarterly.map(q => q.source_id)))}
-          ${DATA.hk_press.length ? card("hk-press", t("hk_press_title"), t("hk_press_sub"), null, cite(["hkspd"]) + `<p class="note">${t("hkspd_use_1")}</p>`) : ""}
+          ${card("mo-annual", t("mo_annual_title"), t("mo_annual_sub"), null, cite(moAnnual.map(d => d.source_id), "suicide.csv"))}
+          ${card("mo-quarter", t("mo_q_title"), t("mo_q_sub"), null, cite(DATA.suicide_quarterly.map(q => q.source_id), "suicide_quarterly.csv"))}
+          ${DATA.hk_press.length ? card("hk-press", t("hk_press_title"), t("hk_press_sub"), null, cite(["hkspd"], "hk_press_monthly.csv") + `<p class="note">${t("hkspd_use_1")}</p>`) : ""}
         </div>
         ${details(t("all_figures"), table(["col_region", "col_year", "col_group", "col_measure", "col_value", "col_note", "col_source"], all.map(d => [
           rname(d.region), d.year, `${t(d.sex)} · ${tl(d.age_group)}`, t("m_" + d.measure), valueCell(d), esc(zh(d, "note")), `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4]))}`;
@@ -208,14 +212,14 @@
     services() {
       return `<p class="lead">${t("services_lead")}</p>
         <div class="grid2">
-          ${card("hk-cases", t("hk_cases_title"), t("hk_cases_sub"), null, cite(hkNewCases().map(d => d.source_id)))}
-          ${card("hk-wait", t("hk_wait_title"), t("hk_wait_sub"), null, cite(["legco_2025_10"]))}
+          ${card("hk-cases", t("hk_cases_title"), t("hk_cases_sub"), null, cite(hkNewCases().map(d => d.source_id), "services.csv"))}
+          ${card("hk-wait", t("hk_wait_title"), t("hk_wait_sub"), null, cite(["legco_2025_10"], "services.csv"))}
         </div>
         <div class="grid2">
-          ${card("hk-att", t("hk_att_title"), t("hk_att_sub"), null, cite(["legco_2025_10"]))}
+          ${card("hk-att", t("hk_att_title"), t("hk_att_sub"), null, cite(["legco_2025_10"], "services.csv"))}
         </div>
         <div class="grid2">
-          ${card("tw-cap", t("tw_cap_title"), t("tw_cap_sub"), null, cite(["udn_mohw_2026"]))}
+          ${card("tw-cap", t("tw_cap_title"), t("tw_cap_sub"), null, cite(["udn_mohw_2026"], "services.csv"))}
           ${card("hotlines", t("hotline_title"), t("hotline_sub"), `<div class="stats">
             ${DATA.services.filter(d => d.indicator === "hotline_calls").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${esc(tl(d.group))}</span><span class="s">${esc(per(d.period))}${d.note ? " · " + esc(zh(d, "note")) : ""}</span></div>`).join("")}
             ${DATA.services.filter(d => d.indicator === "people_treated").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${t("people_treated")}</span><span class="s">${esc(per(d.period))}</span></div>`).join("")}
@@ -228,7 +232,7 @@
     surveys() {
       return `<p class="lead">${t("surveys_lead")}</p>
         <div class="legend static">${["diagnostic", "screening"].map(m => `<span>${dot("--m-" + m)}${t("method_" + m)}</span>`).join("")}</div>
-        ${REGIONS.map(R => surveyRows(R.id).length ? card("sv-" + R.id, `${dot(R.color)} ${rname(R.id)}`, t("survey_region_sub"), null, cite(surveyRows(R.id).map(r => r.source))) : "").join("")}
+        ${REGIONS.map(R => surveyRows(R.id).length ? card("sv-" + R.id, `${dot(R.color)} ${rname(R.id)}`, t("survey_region_sub"), null, cite(surveyRows(R.id).map(r => r.source), "surveys.csv")) : "").join("")}
         ${details(t("all_figures"), table(["col_region", "col_year", "col_survey", "col_population", "col_sample", "col_indicator", "col_value", "col_source"],
           DATA.surveys.map(d => [rname(d.region), esc(d.year), esc(tl(d.survey)), esc(tl(d.population)), `<span class="num">${num(d.sample)}</span>`, `${esc(tl(d.indicator))}<br><span class="est">${t("method_" + d.method)}</span>`, `<span class="num">${d.unit === "%" ? d.value + "%" : d.value}</span>`, `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4, 6]))}`;
     },
@@ -264,7 +268,6 @@
     if (has("tw-notif")) Charts.barChart(has("tw-notif"), { bars: twN.map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true, aria: t("tw_notif_title") });
     ["ov-mo", "mo-quarter"].forEach(id => has(id) && Charts.barChart(has(id), { bars: quarterBars(), color: "--s-mo", fmt: num, emphasizeLast: true, aria: t("mo_q_title") }));
     ["ov-hk", "hk-cases"].forEach(id => has(id) && Charts.barChart(has(id), { bars: hkNewCases().map(d => ({ label: d.period, value: +d.value, note: esc(zh(d, "note")) })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_cases_title") }));
-    if (has("ov-surveys")) Charts.hbarChart(has("ov-surveys"), { rows: surveyRows(), max: 100, fmt: v => v + "%", aria: t("survey_title") });
     REGIONS.forEach(R => has("sv-" + R.id) && Charts.hbarChart(has("sv-" + R.id), { rows: surveyRows(R.id), max: 100, fmt: v => v + "%" }));
     if (has("hk-groups")) {
       const groups = [["men_60", "male", "60+"], ["men", "male", "all"], ["women_60", "female", "60+"], ["youth", "all", "15-24"], ["women", "female", "all"], ["under15", "all", "under 15"]];
@@ -280,8 +283,9 @@
     if (has("hk-press")) {
       const byMonth = {};
       DATA.hk_press.forEach(r => { byMonth[r.month] = (byMonth[r.month] || 0) + (+r.reports || 0); });
-      const months = Object.keys(byMonth).sort().slice(-24);
-      Charts.barChart(has("hk-press"), { bars: months.map(m => ({ label: m, value: byMonth[m] })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_press_title") });
+      const all = Object.keys(byMonth).sort();
+      const roll = all.map((m, i) => i >= 11 ? { m, v: all.slice(i - 11, i + 1).reduce((a, k) => a + byMonth[k], 0) } : null).filter(Boolean).slice(-24);
+      Charts.barChart(has("hk-press"), { bars: roll.map(r => ({ label: r.m, value: r.v })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_press_title") });
     }
     if (has("hk-att")) Charts.barChart(has("hk-att"), { bars: DATA.services.filter(d => d.region === "HK" && d.indicator === "psychiatric_attendances").map(d => ({ label: d.period, value: +d.value })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_att_title") });
     if (has("hk-wait")) Charts.hbarChart(has("hk-wait"), { rows: DATA.services.filter(d => d.region === "HK" && d.indicator === "routine_wait_weeks").map(d => ({ label: tl(d.group), value: +d.value, color: "--s-hk", sub: esc(zh(d, "note")) })), fmt: v => `${v} ${t("weeks")}` });

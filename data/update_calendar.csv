@@ -1,0 +1,7 @@
+source,region,month,frequency,what_to_update
+HKU CSRP suicide statistics,HK,9,yearly,New yearly suicide figures (World Suicide Prevention Day press release)
+MOHW cause of death statistics,TW,6,yearly,Suicide deaths and attempt notifications for the previous year
+Health Bureau suicide surveillance,MO,2;5;8;11,quarterly,Quarterly suicide counts
+Hospital Authority psychiatry waiting times,HK,1;4;7;10,quarterly,Waiting times by cluster
+HK Legislative Council replies,HK,3,yearly,Psychiatric service figures from budget-session replies
+HKSPD press database,HK,*,monthly,Run scripts/fetch_hkspd.py and commit data/hk_press_monthly.csv
