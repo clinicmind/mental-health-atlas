@@ -1,0 +1,11 @@
+what,region,months,where_to_look,data_file
+HKU CSRP yearly suicide figures (World Suicide Prevention Day release),HK,9,https://csrp.hku.hk/,suicide.csv
+HKSPD monthly news-report counts (run scripts/fetch_hkspd.py),HK,"1;2;3;4;5;6;7;8;9;10;11;12",https://hkspd.siuyeong.com/,hk_press_monthly.csv
+Hospital Authority psychiatric waiting times and attendances,HK,"3;6;9;12",https://www.ha.org.hk/,services.csv
+Legislative Council replies on mental health services,HK,"1;4;7;10",https://www.legco.gov.hk/,services.csv
+MOHW cause-of-death statistics (suicide deaths),TW,6,https://www.mohw.gov.tw/,suicide.csv
+MOHW suicide notification statistics,TW,"6;12",https://www.mohw.gov.tw/,suicide.csv
+Macau Health Bureau quarterly suicide figures,MO,"3;6;9;12",https://www.ssm.gov.mo/,suicide_quarterly.csv
+Macau yearly suicide figures (Government Information Bureau release),MO,9,https://www.gcs.gov.mo/,suicide.csv
+Hotline volumes and repeat survey reports,all,6,see sources.csv,services.csv
+Check help-line numbers shown on every page are still correct,all,"1;7",index.html,

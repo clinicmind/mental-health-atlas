@@ -1,0 +1,23 @@
+name: Monthly data update reminder
+
+on:
+  schedule:
+    - cron: "0 1 1 * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Open the reminder issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          month=$(date -u +%Y-%m)
+          python3 scripts/update_reminder.py > body.md
+          gh issue create --title "Data update checklist, ${month}" --body-file body.md

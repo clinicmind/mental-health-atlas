@@ -71,8 +71,61 @@
       <div><h2>${title}</h2>${sub ? `<p class="sub">${sub}</p>` : ""}</div>
       ${body || `<div class="chartwrap" id="${id}"></div>`}
       ${note || ""}
+      ${dataFooter(id)}
     </section>`;
   }
+
+  // ---------- per-chart data: "data as of" line and CSV download ----------
+  const sx = (rows, cols) => rows.map(r => Object.fromEntries(cols.map(c => [c, r[c]])));
+  const SUI_COLS = ["region", "year", "sex", "age_group", "measure", "value", "unit", "estimate", "source_id", "note"];
+  const SVC_COLS = ["region", "period", "indicator", "group", "value", "unit", "source_id", "note"];
+  const SUR_COLS = ["region", "year", "survey", "population", "sample", "indicator", "value", "unit", "method", "source_id", "note"];
+  const suiRows = f => sx(suicide(f), SUI_COLS);
+  const svcRows = f => sx(DATA.services.filter(f), SVC_COLS);
+  const CHART_DATA = {
+    "ov-tw": () => suiRows({ region: "TW", measure: "attempt_notifications" }),
+    "tw-notif": () => suiRows({ region: "TW", measure: "attempt_notifications" }),
+    "tw-deaths": () => suiRows({ region: "TW", sex: "all", age_group: "all", measure: "deaths" }),
+    "mo-annual": () => suiRows({ region: "MO", sex: "all", age_group: "all", measure: "deaths" }),
+    "ov-mo": () => DATA.suicide_quarterly.map(q => ({ ...q })),
+    "mo-quarter": () => DATA.suicide_quarterly.map(q => ({ ...q })),
+    "ov-hk": () => svcRows(d => d.region === "HK" && d.indicator === "psychiatric_new_cases"),
+    "hk-cases": () => svcRows(d => d.region === "HK" && d.indicator === "psychiatric_new_cases"),
+    "hk-att": () => svcRows(d => d.region === "HK" && d.indicator === "psychiatric_attendances"),
+    "hk-wait": () => svcRows(d => d.region === "HK" && d.indicator === "routine_wait_weeks"),
+    "tw-cap": () => svcRows(d => d.region === "TW" && ["psychiatric_beds", "rehab_places"].includes(d.indicator)),
+    "hk-youth": () => suiRows({ region: "HK", age_group: "15-24" }),
+    "hk-groups": () => suiRows({ region: "HK", year: "2021", measure: "crude_rate" }),
+    "hk-press": () => DATA.hk_press.map(r => ({ ...r })),
+    "sv-HK": () => sx(DATA.surveys.filter(d => d.region === "HK"), SUR_COLS),
+    "sv-TW": () => sx(DATA.surveys.filter(d => d.region === "TW"), SUR_COLS),
+    "sv-MO": () => sx(DATA.surveys.filter(d => d.region === "MO"), SUR_COLS),
+  };
+  const rowTime = r => String(r.year || r.period || r.month || "").match(/\d{4}([-/]\d{2})?/)?.[0] || "";
+
+  function dataFooter(id, getRows = CHART_DATA[id]) {
+    if (!getRows || !DATA) return "";
+    const rows = getRows();
+    if (!rows.length) return "";
+    const latest = rows.map(rowTime).filter(Boolean).sort().pop() || "";
+    const accessed = [...new Set(rows.map(r => r.source_id).filter(Boolean))].map(i => (src(i).accessed || "")).sort().pop() || "";
+    return `<div class="datafoot"><span>${t("data_asof")} <b class="num">${esc(latest)}</b>${accessed ? ` · ${t("data_checked")} <span class="num">${esc(accessed)}</span>` : ""}</span>
+      <button type="button" class="dl" data-dl="${esc(id)}">${t("download_csv")}</button></div>`;
+  }
+
+  function downloadCSV(id) {
+    const rows = (id === "trend" ? trendRows : CHART_DATA[id])();
+    if (!rows.length) return;
+    const cols = Object.keys(rows[0]);
+    const q = v => { v = String(v ?? ""); return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v; };
+    const csv = "\ufeff" + [cols.join(","), ...rows.map(r => cols.map(c => q(r[c])).join(","))].join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    a.download = `atlas-${id}.csv`;
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+  const trendRows = () => REGIONS.filter(R => state.shown.has(R.id)).flatMap(R => suiRows({ region: R.id, sex: "all", age_group: "all", measure: state.measure }));
 
   function tilesHTML() {
     return `<div class="tiles">${REGIONS.map(R => {
@@ -110,6 +163,7 @@
       <div class="chartwrap" id="trend"></div>
       <p class="note">${t("trend_note")}</p>
       <div id="trend-cite"></div>
+      <div id="trend-foot"></div>
     </section>`;
   }
 
@@ -129,6 +183,7 @@
       estLabel: t("est"), noFigure: t("no_figure"), aria: t("trend_title"),
     });
     document.getElementById("trend-cite").innerHTML = cite(ids);
+    document.getElementById("trend-foot").innerHTML = dataFooter("trend", trendRows);
   }
 
   function bindTrend() {
@@ -182,7 +237,7 @@
           ${card("ov-mo", t("mo_q_title"), t("mo_q_sub"), null, cite(DATA.suicide_quarterly.map(q => q.source_id)))}
           ${card("ov-hk", t("hk_cases_title"), t("hk_cases_sub"), null, cite(hkNewCases().map(d => d.source_id)))}
         </div>
-        ${card("ov-surveys", t("survey_title"), t("survey_sub"), `<div class="legend static">${["diagnostic", "screening"].map(m => `<span>${dot("--m-" + m)}${t("method_" + m)}</span>`).join("")}</div><div class="chartwrap" id="ov-surveys"></div>`, cite(DATA.surveys.filter(d => d.unit === "%").map(d => d.source_id)))}`;
+        <p class="note gap">${t("ov_surveys_pointer")} <a href="#surveys">${t("tab_surveys")}</a></p>`;
     },
     suicide() {
       const moAnnual = overall("MO", "deaths");
@@ -264,7 +319,6 @@
     if (has("tw-notif")) Charts.barChart(has("tw-notif"), { bars: twN.map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true, aria: t("tw_notif_title") });
     ["ov-mo", "mo-quarter"].forEach(id => has(id) && Charts.barChart(has(id), { bars: quarterBars(), color: "--s-mo", fmt: num, emphasizeLast: true, aria: t("mo_q_title") }));
     ["ov-hk", "hk-cases"].forEach(id => has(id) && Charts.barChart(has(id), { bars: hkNewCases().map(d => ({ label: d.period, value: +d.value, note: esc(zh(d, "note")) })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_cases_title") }));
-    if (has("ov-surveys")) Charts.hbarChart(has("ov-surveys"), { rows: surveyRows(), max: 100, fmt: v => v + "%", aria: t("survey_title") });
     REGIONS.forEach(R => has("sv-" + R.id) && Charts.hbarChart(has("sv-" + R.id), { rows: surveyRows(R.id), max: 100, fmt: v => v + "%" }));
     if (has("hk-groups")) {
       const groups = [["men_60", "male", "60+"], ["men", "male", "all"], ["women_60", "female", "60+"], ["youth", "all", "15-24"], ["women", "female", "all"], ["under15", "all", "under 15"]];
@@ -280,11 +334,13 @@
     if (has("hk-press")) {
       const byMonth = {};
       DATA.hk_press.forEach(r => { byMonth[r.month] = (byMonth[r.month] || 0) + (+r.reports || 0); });
-      const months = Object.keys(byMonth).sort().slice(-24);
-      Charts.barChart(has("hk-press"), { bars: months.map(m => ({ label: m, value: byMonth[m] })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_press_title") });
+      const months = Object.keys(byMonth).sort();
+      const roll = months.map((m, i) => i >= 11 ? { label: m, value: months.slice(i - 11, i + 1).reduce((a, k) => a + byMonth[k], 0) } : null).filter(Boolean).slice(-24);
+      Charts.barChart(has("hk-press"), { bars: roll, color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_press_title") });
     }
     if (has("hk-att")) Charts.barChart(has("hk-att"), { bars: DATA.services.filter(d => d.region === "HK" && d.indicator === "psychiatric_attendances").map(d => ({ label: d.period, value: +d.value })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_att_title") });
     if (has("hk-wait")) Charts.hbarChart(has("hk-wait"), { rows: DATA.services.filter(d => d.region === "HK" && d.indicator === "routine_wait_weeks").map(d => ({ label: tl(d.group), value: +d.value, color: "--s-hk", sub: esc(zh(d, "note")) })), fmt: v => `${v} ${t("weeks")}` });
+    document.querySelectorAll("[data-dl]").forEach(b => b.addEventListener("click", () => downloadCSV(b.dataset.dl)));
     document.querySelectorAll("[data-srctype]").forEach(b => b.addEventListener("click", () => { state.srcType = b.dataset.srctype; render(); }));
   }
 

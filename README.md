@@ -49,3 +49,9 @@ Hong Kong 18111 · Samaritan Befrienders 2389 2222 · Taiwan 1925 · Macau Carit
 ## HKSPD news-report counts
 
 `scripts/fetch_hkspd.py` turns the Hong Kong Suicide Press Database CSV into monthly counts by sex, age band and outcome (`data/hk_press_monthly.csv`). It never reads method, location, name or reason columns. The cloud sandbox cannot reach the database, so run it on a machine with internet access, then save the output as `data/hk_press_monthly.csv`. The Suicide page draws a monthly chart automatically when that file exists, and hides it when it doesn't. To refresh monthly, re-run the command and commit the file. These are media-report counts, not official statistics; follow the usage and citation terms shown on the site's Sources page.
+
+## Monthly update routine
+
+`data/update_calendar.csv` lists which sources to check in which month. A GitHub Action (`.github/workflows/monthly-reminder.yml`) opens an issue on the 1st of each month with that month's checklist; you can also run it by hand from the Actions tab, or print the list with `python3 scripts/update_reminder.py`.
+
+Every chart shows "data up to" and a CSV download button. Both are built from the data files, so they update when you do.

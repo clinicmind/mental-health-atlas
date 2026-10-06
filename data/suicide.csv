@@ -29,7 +29,7 @@ HK,2015,all,15-24,crude_rate,8.5,per 100000,no,csrp_2016,,
 HK,2016,all,15-24,crude_rate,9.5,per 100000,no,csrp_2018,,
 HK,2020,all,15-24,crude_rate,8.2,per 100000,no,csrp_2021,,
 HK,2021,all,15-24,crude_rate,9.3,per 100000,no,csrp_2022,,
-HK,2021,all,under 15,crude_rate,1.7,per 100000,no,csrp_2022,Record high,歷史新高
+HK,2021,all,under 15,crude_rate,1.7,per 100000,no,csrp_2022,,
 HK,2021,male,25-39,crude_rate,10.0,per 100000,no,csrp_2025,,
 HK,2024,male,25-39,crude_rate,14.4,per 100000,no,csrp_2025,SCMP reports 23.0 for this group,南華早報報道此組別為 23.0
 HK,2023,male,25-39,crude_rate,17.9,per 100000,no,scmp_2025,Differs from CSRP release,與防止自殺研究中心新聞稿數字不同
@@ -81,7 +81,7 @@ MO,2021,all,all,deaths,60,deaths,no,ucanews_2024,,
 MO,2022,all,all,deaths,80,deaths,no,mdt_2023,,
 MO,2023,all,all,deaths,88,deaths,no,mdt_2023,Sum of the four Health Bureau quarterly releases,衛生局四季公布數字之和
 MO,2024,all,all,deaths,90,deaths,no,mdt_2024,Sum of the four Health Bureau quarterly releases (22+22+21+25); AAMacau reported 91,衛生局四季公布數字之和（22+22+21+25）；論盡媒體報道為 91 宗
-MO,2025,all,all,deaths,91,deaths,no,mb_2025,"Highest since records began in 1990. Same article implies 86 for 2024, which does not match the quarterly releases",自 1990 年有紀錄以來最高。同一報道推算 2024 年為 86 宗，與季度公布數字不符
+MO,2025,all,all,deaths,91,deaths,no,mb_2025,"Same article implies 86 for 2024, which does not match the quarterly releases",同一報道推算 2024 年為 86 宗，與季度公布數字不符
 MO,2022,all,all,crude_rate,11.9,per 100000,yes,mdt_2023,"Deaths / population of about 672,000","死亡人數 ÷ 人口約 672,000"
 MO,2023,all,all,crude_rate,12.9,per 100000,yes,mdt_2023,"Deaths / population of about 684,000","死亡人數 ÷ 人口約 684,000"
 MO,2024,all,all,crude_rate,13.1,per 100000,yes,mdt_2024,"Deaths / population of about 688,000","死亡人數 ÷ 人口約 688,000"
@@ -93,7 +93,7 @@ HK,2022,all,all,age_std_rate,10.6,per 100000,no,csrp_2023,,
 HK,2025,all,all,crude_rate,13.0,per 100000,no,csrp_2026,Estimated by CSRP (13.01),防止自殺研究中心估算（13.01）
 HK,2025,all,all,age_std_rate,9.8,per 100000,no,csrp_2026,Estimated by CSRP,防止自殺研究中心估算
 HK,2018,all,15-24,crude_rate,9.5,per 100000,no,csrp_2019,Estimated by CSRP,防止自殺研究中心估算
-HK,2022,all,15-24,crude_rate,12.2,per 100000,no,csrp_2023,Highest on record,歷史新高
+HK,2022,all,15-24,crude_rate,12.2,per 100000,no,csrp_2023,Highest in the CSRP youth series from 2014,防止自殺研究中心 2014 年起青年數列中的最高值
 HK,2024,all,15-24,crude_rate,11.7,per 100000,no,koreatimes_2026,Reported from HKU centre data,報道引用港大中心數據
 TW,2025,all,all,deaths,3951,deaths,no,mohw_cod_2025,111 fewer than 2024,較 2024 年減少 111 人
 TW,2025,all,all,crude_rate,16.9,per 100000,no,mohw_cod_2025,,
