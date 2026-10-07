@@ -57,6 +57,8 @@ window.I18N = {
     hk_youth_title: "Hong Kong: young people aged 15 to 24",
     hk_youth_sub: "Suicide rate per 100,000 in years CSRP reported it",
     tw_deaths_title: "Taiwan: suicide deaths",
+    tw_age_title: "Taiwan: suicide rate by age group, 2024",
+    tw_age_sub: "Per 100,000 people in each age group. Men 22.2 and women 12.6 overall.",
     tw_deaths_sub: "Deaths per year, Ministry of Health and Welfare. 2025 was 3,951, 111 fewer than in 2024.",
     mo_annual_title: "Macau: suicide deaths per year",
     mo_annual_sub: "Years with a published total. 2025 was 91.",
@@ -150,6 +152,8 @@ window.I18N = {
     hk_youth_title: "香港：15至24歲年輕人",
     hk_youth_sub: "港大防止自殺研究中心有公佈的年份，每十萬人自殺率",
     tw_deaths_title: "台灣：自殺死亡人數",
+    tw_age_title: "台灣：2024 年各年齡層自殺死亡率",
+    tw_age_sub: "每十萬同齡人口。整體男性 22.2，女性 12.6",
     tw_deaths_sub: "衛生福利部每年自殺死亡人數，2025 年為 3,951 人，較 2024 年少 111 人",
     mo_annual_title: "澳門：每年自殺死亡人數",
     mo_annual_sub: "有公佈全年總數的年份；2025 年為 91 宗",
@@ -188,7 +192,7 @@ window.I18N = {
   },
   // Data labels shown in Chinese mode. Anything missing stays in English.
   labels: {
-    "all": "全部", "all ages": "所有年齡", "60+": "60歲或以上", "65+": "65歲或以上", "15-24": "15至24歲", "25-39": "25至39歲", "under 15": "15歲以下",
+    "all": "全部", "all ages": "所有年齡", "15-19": "15至19歲", "20-24": "20至24歲", "25-29": "25至29歲", "30-34": "30至34歲", "35-39": "35至39歲", "40-44": "40至44歲", "45-49": "45至49歲", "50-54": "50至54歲", "55-59": "55至59歲", "60-64": "60至64歲", "65-69": "65至69歲", "70-74": "70至74歲", "75-79": "75至79歲", "80-84": "80至84歲", "85+": "85歲或以上", "60+": "60歲或以上", "65+": "65歲或以上", "15-24": "15至24歲", "25-39": "25至39歲", "under 15": "15歲以下",
     "age 0-29": "0至29歲", "children and adolescents": "兒童及青少年", "adults": "成人",
     "18111 Mental Health Support Hotline": "18111 精神健康支援熱線", "Social Welfare Bureau 24-hour counselling hotline": "社會工作局 24 小時心理輔導熱線",
     "mental illness (all)": "所有精神疾病", "acute": "急性", "chronic": "慢性", "community psychiatric rehabilitation": "社區精神復健",

@@ -86,6 +86,7 @@
     "ov-tw": () => suiRows({ region: "TW", measure: "attempt_notifications" }),
     "tw-notif": () => suiRows({ region: "TW", measure: "attempt_notifications" }),
     "tw-deaths": () => suiRows({ region: "TW", sex: "all", age_group: "all", measure: "deaths" }),
+    "tw-age": () => suiRows({ region: "TW", year: "2024", measure: "crude_rate" }),
     "mo-annual": () => suiRows({ region: "MO", sex: "all", age_group: "all", measure: "deaths" }),
     "ov-mo": () => DATA.suicide_quarterly.map(q => ({ ...q })),
     "mo-quarter": () => DATA.suicide_quarterly.map(q => ({ ...q })),
@@ -250,6 +251,7 @@
         </div>
         <div class="grid2">
           ${card("tw-deaths", t("tw_deaths_title"), t("tw_deaths_sub"), null, cite(["mohw_suicide"]))}
+          ${card("tw-age", t("tw_age_title"), t("tw_age_sub"), null, cite(["mohw_cod_113"]))}
           ${card("tw-notif", t("tw_notif_title"), t("tw_notif_sub2"), null, cite(["mohw_suicide"]))}
         </div>
         <div class="grid2">
@@ -334,6 +336,10 @@
     if (has("hk-youth")) {
       const pts = suicide({ region: "HK", sex: "all", age_group: "15-24", measure: "crude_rate" }).map(d => ({ x: +d.year, y: +d.value }));
       Charts.lineChart(has("hk-youth"), { series: [{ id: "HK", label: t("g_youth"), color: "--s-hk", points: pts }], xMin: 2011, xMax: Math.max(...pts.map(p => p.x)) + 1, fmt: (v, a) => a ? String(+v.toFixed(1)) : one(v), height: 220 });
+    }
+    if (has("tw-age")) {
+      const bands = ["15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+"];
+      Charts.hbarChart(has("tw-age"), { rows: bands.map(a => { const d = suicide({ region: "TW", year: "2024", sex: "all", age_group: a, measure: "crude_rate" })[0]; return d && { label: tl(a), value: +d.value, color: "--s-tw" }; }).filter(Boolean), fmt: one });
     }
     if (has("tw-deaths")) Charts.barChart(has("tw-deaths"), { bars: overall("TW", "deaths").map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true });
     if (has("mo-annual")) Charts.barChart(has("mo-annual"), { bars: overall("MO", "deaths").map(p => ({ label: String(p.x), value: p.y, note: esc(zh(p, "note")) })), color: "--s-mo", fmt: num, emphasizeLast: true });
