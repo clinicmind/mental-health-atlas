@@ -4,7 +4,7 @@
   --surface: #ffffff;
   --ink: #16201d;
   --ink-2: #4b5753;
-  --ink-3: #6d7975;
+  --ink-3: #5f6b67;
   --line: #dde3e0;
   --grid: #eceff0;
   --accent: #1f6f5c;
@@ -162,3 +162,9 @@ details.data .tablewrap { padding: 4px 8px 8px; }
 .datafoot { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; justify-content: space-between; font-size: 12px; color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 10px; margin-top: 2px; }
 .datafoot .dl { font: inherit; font-size: 12px; color: var(--ink-2); background: none; border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
 .datafoot .dl:hover, .datafoot .dl:focus-visible { color: var(--ink); border-color: var(--ink-3); }
+
+.skip { position: absolute; left: -9999px; top: 0; background: var(--ink); color: var(--bg); padding: 8px 14px; z-index: 10; }
+.skip:focus { left: 8px; top: 8px; }
+.about h2 { margin-top: 28px; }
+.about p, .about li { max-width: 62ch; line-height: 1.75; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

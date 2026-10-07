@@ -5,7 +5,7 @@
     { id: "TW", zh: "台灣", en: "Taiwan", color: "--s-tw" },
     { id: "MO", zh: "澳門", en: "Macau", color: "--s-mo" },
   ];
-  const TABS = ["overview", "suicide", "services", "surveys", "sources"];
+  const TABS = ["overview", "suicide", "services", "surveys", "sources", "about"];
   const TYPE_COLOR = { government: "--t-gov", ngo: "--t-ngo", academic: "--t-aca", news: "--t-news" };
   const state = { lang: "zh", tab: "overview", measure: "crude_rate", shown: new Set(REGIONS.map(r => r.id)), srcType: "all" };
   let DATA = null;
@@ -287,6 +287,13 @@
         ${details(t("all_figures"), table(["col_region", "col_year", "col_survey", "col_population", "col_sample", "col_indicator", "col_value", "col_source"],
           DATA.surveys.map(d => [rname(d.region), esc(d.year), esc(tl(d.survey)), esc(tl(d.population)), `<span class="num">${num(d.sample)}</span>`, `${esc(tl(d.indicator))}<br><span class="est">${t("method_" + d.method)}</span>`, `<span class="num">${d.unit === "%" ? d.value + "%" : d.value}</span>`, `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4, 6]))}`;
     },
+    about() {
+      const sec = k => `<h2>${t("about_" + k + "_h")}</h2><p>${t("about_" + k)}</p>`;
+      return `<div class="about"><h2 class="vh">${t("about_title")}</h2>
+        ${sec("what")}${sec("who")}${sec("data")}${sec("safe")}
+        <h2>${t("about_err_h")}</h2><p>${t("about_err")} <a href="https://github.com/clinicmind/mental-health-atlas/issues" target="_blank" rel="noopener">github.com/clinicmind/mental-health-atlas</a></p>
+        ${sec("lic")}</div>`;
+    },
     sources() {
       const types = ["government", "ngo", "academic", "news"];
       const counts = Object.fromEntries(types.map(ty => [ty, DATA.sources.filter(s => s.type === ty).length]));
@@ -340,6 +347,10 @@
     }
     if (has("hk-att")) Charts.barChart(has("hk-att"), { bars: DATA.services.filter(d => d.region === "HK" && d.indicator === "psychiatric_attendances").map(d => ({ label: d.period, value: +d.value })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_att_title") });
     if (has("hk-wait")) Charts.hbarChart(has("hk-wait"), { rows: DATA.services.filter(d => d.region === "HK" && d.indicator === "routine_wait_weeks").map(d => ({ label: tl(d.group), value: +d.value, color: "--s-hk", sub: esc(zh(d, "note")) })), fmt: v => `${v} ${t("weeks")}` });
+    document.querySelectorAll(".chart-card").forEach(c => {
+      const h = c.querySelector("h2"); const svg = c.querySelector(".chartwrap svg");
+      if (h && svg && !svg.getAttribute("aria-label")) svg.setAttribute("aria-label", `${h.textContent.trim()}. ${t("chart_alt")}`);
+    });
     document.querySelectorAll("[data-dl]").forEach(b => b.addEventListener("click", () => downloadCSV(b.dataset.dl)));
     document.querySelectorAll("[data-srctype]").forEach(b => b.addEventListener("click", () => { state.srcType = b.dataset.srctype; render(); }));
   }
