@@ -149,7 +149,7 @@ window.I18N = {
     survey_region_sub: "受訪者比例。各研究量度的東西不同，不應直接比較。",
     method_diagnostic: "診斷訪談", method_screening: "症狀篩查", method_scale: "量表分數",
     suicide_lead: "粗死亡率以每十萬居民計算所有死亡。年齡標準化率會調整人口年齡結構，較適合地區間比較，但並非所有來源都有公佈。",
-    hk_groups_title: "香港 2021 年：哪些人風險最高",
+    hk_groups_title: "香港 2021 年：各組別的自殺率",
     hk_groups_sub: "各組別每十萬人自殺率",
     hk_youth_title: "香港：15至24歲年輕人",
     hk_youth_sub: "港大防止自殺研究中心有公佈的年份，每十萬人自殺率",
