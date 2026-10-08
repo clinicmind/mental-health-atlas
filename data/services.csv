@@ -14,3 +14,103 @@ HK,2022/23,psychiatric_attendances,all ages,967199,attendances,legco_2025_10,"Ho
 HK,2023/24,psychiatric_attendances,all ages,978959,attendances,legco_2025_10,"Hospital Authority specialist outpatient attendances (visits, not patients)",醫院管理局精神科專科門診求診人次（非人數）,no
 HK,2024/25,psychiatric_attendances,all ages,1024287,attendances,legco_2025_10,"Hospital Authority specialist outpatient attendances (visits, not patients)",醫院管理局精神科專科門診求診人次（非人數）,no
 MO,2024,psychiatric_attendances,all ages,50597,attendances,alm_2025_ho,Psychiatric outpatient attendances stated in a legislator's written question,立法會議員書面質詢所載精神科門診求診人次,no
+HK,2011/12,psychiatric_triaged_new_cases,all,44900,cases,legco_issh29_1617,,精神科專科門診被分流的新症,no
+HK,2012/13,psychiatric_triaged_new_cases,all,46600,cases,legco_issh29_1617,,,no
+HK,2013/14,psychiatric_triaged_new_cases,all,47100,cases,legco_issh29_1617,,,no
+HK,2014/15,psychiatric_triaged_new_cases,all,47600,cases,legco_issh29_1617,,,no
+HK,2015/16,psychiatric_triaged_new_cases,all,48300,cases,legco_issh29_1617,,,no
+HK,2022/23,first_attendances,all,41887,attendances,lcq12_20251022,,首次求診人次,no
+HK,2023/24,first_attendances,all,44692,attendances,lcq12_20251022,,,no
+HK,2024/25,first_attendances,all,46814,attendances,lcq12_20251022,,,no
+HK,2022/23,first_attendances,age 0-18,12165,attendances,lcq12_20251022,,0-5、6-11、12-18 歲合計,no
+HK,2023/24,first_attendances,age 0-18,13047,attendances,lcq12_20251022,,,no
+HK,2024/25,first_attendances,age 0-18,14342,attendances,lcq12_20251022,,,no
+HK,2022/23,first_attendances,age 12-18,3814,attendances,lcq12_20251022,,,no
+HK,2023/24,first_attendances,age 12-18,4136,attendances,lcq12_20251022,,,no
+HK,2024/25,first_attendances,age 12-18,5215,attendances,lcq12_20251022,,,no
+HK,2011/12,total_attendances,all,755745,attendances,legco_issh29_1617,,,no
+HK,2015/16,total_attendances,all,825591,attendances,legco_issh29_1617,,,no
+HK,2022/23,total_attendances,all,967199,attendances,lcq12_20251022,,,no
+HK,2023/24,total_attendances,all,978959,attendances,lcq12_20251022,,,no
+HK,2024/25,total_attendances,all,1024287,attendances,lcq12_20251022,,,no
+HK,2012/13,median_wait_routine,all,16,weeks,legco_issh29_1617,,新例行個案輪候時間中位數,no
+HK,2015/16,median_wait_routine,all,22,weeks,legco_issh29_1617,,,no
+HK,2022/23,median_wait_routine,child_adolescent,73,weeks,lcq12_20251022,,例行（穩定）新症,no
+HK,2023/24,median_wait_routine,child_adolescent,77,weeks,lcq12_20251022,,,no
+HK,2024/25,median_wait_routine,child_adolescent,77,weeks,lcq12_20251022,,,no
+HK,2022/23,median_wait_routine,adult,18,weeks,lcq12_20251022,,,no
+HK,2023/24,median_wait_routine,adult,19,weeks,lcq12_20251022,,,no
+HK,2024/25,median_wait_routine,adult,21,weeks,lcq12_20251022,,,no
+HK,2022/23,routine_new_cases,child_adolescent,13089,cases,lcq12_20251022,,,no
+HK,2023/24,routine_new_cases,child_adolescent,13078,cases,lcq12_20251022,,,no
+HK,2024/25,routine_new_cases,child_adolescent,13607,cases,lcq12_20251022,,,no
+HK,2022/23,routine_new_cases,adult,19105,cases,lcq12_20251022,,,no
+HK,2023/24,routine_new_cases,adult,18877,cases,lcq12_20251022,,,no
+HK,2024/25,routine_new_cases,adult,19426,cases,lcq12_20251022,,,no
+HK,2022/23,median_wait_p1,adult,1,weeks,lcq12_20251022,,第一優先（緊急）,no
+HK,2023/24,median_wait_p1,adult,1,weeks,lcq12_20251022,,,no
+HK,2024/25,median_wait_p1,adult,1,weeks,lcq12_20251022,,,no
+HK,2022/23,median_wait_p2,adult,3,weeks,lcq12_20251022,,第二優先（半緊急）,no
+HK,2023/24,median_wait_p2,adult,3,weeks,lcq12_20251022,,,no
+HK,2024/25,median_wait_p2,adult,3,weeks,lcq12_20251022,,,no
+HK,2011/12,psychiatric_workforce,psychiatrist,334,headcount,legco_issh29_1617,,醫管局；財政年度完結時,no
+HK,2015/16,psychiatric_workforce,psychiatrist,344,headcount,legco_issh29_1617,,,no
+HK,2022/23,psychiatric_workforce,psychiatrist,381,fte,lcq20_20230705,,全職人員當量；口徑與早年不同,no
+HK,2011/12,psychiatric_workforce,psychiatric_nurse,2161,headcount,legco_issh29_1617,,包括社康護士,no
+HK,2015/16,psychiatric_workforce,psychiatric_nurse,2472,headcount,legco_issh29_1617,,,no
+HK,2022/23,psychiatric_workforce,psychiatric_nurse,3015,fte,lcq20_20230705,,,no
+HK,2011/12,psychiatric_workforce,clinical_psychologist,54,headcount,legco_issh29_1617,,,no
+HK,2015/16,psychiatric_workforce,clinical_psychologist,82,headcount,legco_issh29_1617,,,no
+HK,2022/23,psychiatric_workforce,clinical_psychologist,111,fte,lcq20_20230705,,,no
+HK,2011/12,psychiatric_workforce,occupational_therapist,189,headcount,legco_issh29_1617,,,no
+HK,2015/16,psychiatric_workforce,occupational_therapist,245,headcount,legco_issh29_1617,,,no
+HK,2022/23,psychiatric_workforce,occupational_therapist,302,fte,lcq20_20230705,,,no
+HK,2015/16,psychiatric_workforce,case_manager,327,headcount,legco_issh29_1617,,照顧 15400 名嚴重精神病患者，約 1:47,no
+HK,2018-19,easy_attendances,all,41000,attendances,lcq20_20240522,,思覺失調服務計劃服務人次；約數,no
+HK,2019-20,easy_attendances,all,43100,attendances,lcq20_20240522,,,no
+HK,2020-21,easy_attendances,all,46800,attendances,lcq20_20240522,,,no
+HK,2021-22,easy_attendances,all,43600,attendances,lcq20_20240522,,,no
+HK,2022-23,easy_attendances,all,38800,attendances,lcq20_20240522,,受疫情影響,no
+HK,2019-20,lai_antipsychotic_patients,all,13600,patients,lcq20_20240522,,長效針劑（傳統 9900 + 新一代 3700）；兩類可能重疊,no
+HK,2020-21,lai_antipsychotic_patients,all,13500,patients,lcq20_20240522,,,no
+HK,2021-22,lai_antipsychotic_patients,all,13400,patients,lcq20_20240522,,,no
+HK,2022-23,lai_antipsychotic_patients,all,13100,patients,lcq20_20240522,,,no
+HK,2023-24,lai_antipsychotic_patients,all,13300,patients,lcq20_20240522,,推算,no
+HK,2024-06-07,hotline_18111_cumulative,all,57000,calls,legco_hswsed_20240716,,2023年12月27日啟用起累計,no
+HK,2025-09-30,hotline_18111_cumulative,all,208000,calls,lcq12_20251022,,2023年12月27日啟用起累計,no
+HK,2023/24,three_tier_tier2_referrals,all,104,cases,lcq15_20260624,,學校三層應急機制第二層（社署校外支援隊）；2023年12月起,no
+HK,2024/25,three_tier_tier2_referrals,all,299,cases,lcq15_20260624,,,no
+HK,2025/26,three_tier_tier2_referrals,all,330,cases,lcq15_20260624,,截至2026年3月底,no
+HK,2023/24,three_tier_tier3_referrals,all,292,cases,lcq15_20260624,,第三層（校長轉介醫管局精神科）；2023年12月起,no
+HK,2024/25,three_tier_tier3_referrals,all,152,cases,lcq15_20260624,,,no
+HK,2025/26,three_tier_tier3_referrals,all,63,cases,lcq15_20260624,,截至2026年3月底,no
+HK,2014/15,psychiatric_patients,under_18,26500,patients,legco_cb2_468_1920,,醫管局精神科病人；調整至最接近的百位數,no
+HK,2015/16,psychiatric_patients,under_18,28800,patients,legco_cb2_468_1920,,,no
+HK,2016/17,psychiatric_patients,under_18,32300,patients,legco_cb2_468_1920,,,no
+HK,2017/18,psychiatric_patients,under_18,34900,patients,legco_cb2_468_1920,,,no
+HK,2018/19,psychiatric_patients,under_18,36400,patients,legco_cb2_468_1920,,截至2018年12月31日推算,no
+HK,2014/15,psychiatric_patients,18_64,143700,patients,legco_cb2_468_1920,,,no
+HK,2015/16,psychiatric_patients,18_64,149200,patients,legco_cb2_468_1920,,,no
+HK,2016/17,psychiatric_patients,18_64,153900,patients,legco_cb2_468_1920,,,no
+HK,2017/18,psychiatric_patients,18_64,157500,patients,legco_cb2_468_1920,,,no
+HK,2018/19,psychiatric_patients,18_64,159700,patients,legco_cb2_468_1920,,截至2018年12月31日推算,no
+HK,2014/15,psychiatric_patients,65_plus,47200,patients,legco_cb2_468_1920,,,no
+HK,2015/16,psychiatric_patients,65_plus,50700,patients,legco_cb2_468_1920,,,no
+HK,2016/17,psychiatric_patients,65_plus,54700,patients,legco_cb2_468_1920,,,no
+HK,2017/18,psychiatric_patients,65_plus,58800,patients,legco_cb2_468_1920,,,no
+HK,2018/19,psychiatric_patients,65_plus,62600,patients,legco_cb2_468_1920,,截至2018年12月31日推算,no
+HK,2011/12,psychiatric_patients,all,186900,patients,legco_issh29_1617,,,no
+HK,2012/13,psychiatric_patients,all,197600,patients,legco_issh29_1617,,,no
+HK,2013/14,psychiatric_patients,all,208100,patients,legco_issh29_1617,,,no
+HK,2014/15,psychiatric_patients,all,217400,patients,legco_issh29_1617,,,no
+HK,2015/16,psychiatric_patients,all,228700,patients,legco_issh29_1617,,,no
+HK,2018/19,psychiatric_patients,all,258600,patients,legco_cb2_468_1920,,約數；與各年齡組合計相同（258700 經四捨五入）,no
+MO,2022,health_centre_psych_clinic_attendances,all,4961,attendances,mo_al_reply_shi_2024,,衛生中心心理保健門診,no
+MO,2023,health_centre_psych_clinic_attendances,all,6437,attendances,mo_al_reply_shi_2024,,,no
+MO,2023,ngo_counselling_attendances,all,3406,attendances,mo_al_reply_shi_2024,,兩間受資助非牟利機構心理諮詢,no
+MO,2019,health_bureau_mh_staff,all,87,headcount,mo_al_reply_shi_2024,,衛生局精神心理服務團隊（醫生、護士、心理治療師）,no
+MO,2024,health_bureau_mh_staff,all,97,headcount,mo_al_reply_shi_2024,,,no
+MO,2024,psychiatrist_public,all,16,headcount,mo_al_reply_lo_2024,,衛生局精神科專科醫生,no
+MO,2024,psychiatric_nurse_public,all,54,headcount,mo_al_reply_lo_2024,,,no
+MO,2024,psychotherapist_public,all,25,headcount,mo_al_reply_lo_2024,,,no
+MO,2024,psychiatric_beds,all,93,beds,mo_al_reply_wong_2025,,仁伯爵綜合醫院；使用率八成以下,no
