@@ -52,7 +52,7 @@ window.I18N = {
     survey_region_sub: "Share of respondents. Studies measure different things and should not be compared directly.",
     method_diagnostic: "Diagnostic interview", method_screening: "Symptom screening", method_scale: "Scale score",
     suicide_lead: "Crude rates count all deaths per 100,000 residents. Age-standardised rates adjust for age structure and are the fairer comparison between places, but not every source publishes them.",
-    hk_groups_title: "Hong Kong 2021: who is most at risk",
+    hk_groups_title: "Hong Kong 2021: suicide rate by group",
     hk_groups_sub: "Suicide rate per 100,000 by group",
     hk_youth_title: "Hong Kong: young people aged 15 to 24",
     hk_youth_sub: "Suicide rate per 100,000 in years CSRP reported it",
