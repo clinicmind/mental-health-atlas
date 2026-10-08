@@ -77,6 +77,7 @@
 
   // ---------- per-chart data: "data as of" line and CSV download ----------
   const sx = (rows, cols) => rows.map(r => Object.fromEntries(cols.map(c => [c, r[c]])));
+  const TW_TREND = [["15-19", "--s-tw"], ["20-24", "--ink-2"], ["65+", "--ink"]];
   const SUI_COLS = ["region", "year", "sex", "age_group", "measure", "value", "unit", "estimate", "source_id", "note"];
   const SVC_COLS = ["region", "period", "indicator", "group", "value", "unit", "source_id", "note"];
   const SUR_COLS = ["region", "year", "survey", "population", "sample", "indicator", "value", "unit", "method", "source_id", "note"];
@@ -87,6 +88,7 @@
     "tw-notif": () => suiRows({ region: "TW", measure: "attempt_notifications" }),
     "tw-deaths": () => suiRows({ region: "TW", sex: "all", age_group: "all", measure: "deaths" }),
     "tw-age": () => suiRows({ region: "TW", year: "2024", measure: "crude_rate" }),
+    "tw-age-trend": () => TW_TREND.flatMap(([a]) => suiRows({ region: "TW", sex: "all", age_group: a, measure: "crude_rate" })),
     "mo-annual": () => suiRows({ region: "MO", sex: "all", age_group: "all", measure: "deaths" }),
     "ov-mo": () => DATA.suicide_quarterly.map(q => ({ ...q })),
     "mo-quarter": () => DATA.suicide_quarterly.map(q => ({ ...q })),
@@ -252,6 +254,7 @@
         <div class="grid2">
           ${card("tw-deaths", t("tw_deaths_title"), t("tw_deaths_sub"), null, cite(["mohw_suicide"]))}
           ${card("tw-age", t("tw_age_title"), t("tw_age_sub"), null, cite(["mohw_cod_113"]))}
+          ${card("tw-age-trend", t("tw_agetr_title"), t("tw_agetr_sub"), null, `<p class="note">${TW_TREND.map(([a, c]) => `<span aria-hidden="true" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(${c});margin-right:4px"></span>${tl(a)}`).join(" &nbsp; ")}</p>` + cite(["mohw_cod_113"]))}
           ${card("tw-notif", t("tw_notif_title"), t("tw_notif_sub2"), null, cite(["mohw_suicide"]))}
         </div>
         <div class="grid2">
@@ -340,6 +343,10 @@
     if (has("tw-age")) {
       const bands = ["15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+"];
       Charts.hbarChart(has("tw-age"), { rows: bands.map(a => { const d = suicide({ region: "TW", year: "2024", sex: "all", age_group: a, measure: "crude_rate" })[0]; return d && { label: tl(a), value: +d.value, color: "--s-tw" }; }).filter(Boolean), fmt: one });
+    }
+    if (has("tw-age-trend")) {
+      const series = TW_TREND.map(([a, c]) => ({ id: a, label: tl(a), color: c, points: suicide({ region: "TW", sex: "all", age_group: a, measure: "crude_rate" }).map(d => ({ x: +d.year, y: +d.value })) }));
+      Charts.lineChart(has("tw-age-trend"), { series, xMin: 2015, xMax: 2025, fmt: (v, a) => a ? String(+v.toFixed(1)) : one(v), height: 240, aria: t("tw_agetr_title") });
     }
     if (has("tw-deaths")) Charts.barChart(has("tw-deaths"), { bars: overall("TW", "deaths").map(p => ({ label: String(p.x), value: p.y })), color: "--s-tw", fmt: num, emphasizeLast: true });
     if (has("mo-annual")) Charts.barChart(has("mo-annual"), { bars: overall("MO", "deaths").map(p => ({ label: String(p.x), value: p.y, note: esc(zh(p, "note")) })), color: "--s-mo", fmt: num, emphasizeLast: true });
