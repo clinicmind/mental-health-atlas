@@ -47,7 +47,7 @@
   }
 
   async function load() {
-    const names = ["suicide", "suicide_quarterly", "services", "surveys", "sources"];
+    const names = ["suicide", "suicide_quarterly", "services", "surveys", "sources", "budget_lines", "gaps"];
     const texts = await Promise.all(names.map(n => fetch(`data/${n}.csv`).then(r => { if (!r.ok) throw new Error(n); return r.text(); })));
     const d = {};
     names.forEach((n, i) => { d[n] = parseCSV(texts[i]); });
@@ -80,10 +80,21 @@
   const TW_TREND = [["15-19", "--s-tw"], ["20-24", "--ink-2"], ["65+", "--ink"]];
   const SUI_COLS = ["region", "year", "sex", "age_group", "measure", "value", "unit", "estimate", "source_id", "note"];
   const SVC_COLS = ["region", "period", "indicator", "group", "value", "unit", "source_id", "note"];
+  const BUD_COLS = ["region", "fiscal_year", "category", "stage", "value", "original_unit", "scope", "source_id", "source_locator"];
+  const hkBudgetTotals = () => DATA.budget_lines.filter(b => b.region === "HK" && b.category === "total");
+  const yearsRange = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+  function gapCell(region, year) {
+    const v = DATA.budget_lines.some(b => b.region === region && b.category !== "total" && b.category !== "six_year_plan_total" && b.fiscal_year.startsWith(String(year)) && b.stage !== "proposed_budget");
+    if (v) return "V";
+    const g = DATA.gaps.find(x => x.region === region && x.year === String(year));
+    return g ? g.status : "–";
+  }
   const SUR_COLS = ["region", "year", "survey", "population", "sample", "indicator", "value", "unit", "method", "source_id", "note"];
   const suiRows = f => sx(suicide(f), SUI_COLS);
   const svcRows = f => sx(DATA.services.filter(f), SVC_COLS);
   const CHART_DATA = {
+    "hk-budget": () => sx(DATA.budget_lines.filter(b => b.region === "HK" && b.category === "total"), BUD_COLS),
+    "tw-budget": () => sx(DATA.budget_lines.filter(b => b.region === "TW"), BUD_COLS),
     "ov-tw": () => suiRows({ region: "TW", measure: "attempt_notifications" }),
     "tw-notif": () => suiRows({ region: "TW", measure: "attempt_notifications" }),
     "tw-deaths": () => suiRows({ region: "TW", sex: "all", age_group: "all", measure: "deaths" }),
@@ -281,6 +292,11 @@
             ${DATA.services.filter(d => d.indicator === "people_treated").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${t("people_treated")}</span><span class="s">${esc(per(d.period))}</span></div>`).join("")}
           </div>`, cite(DATA.services.filter(d => d.indicator === "hotline_calls" || d.indicator === "people_treated").map(d => d.source_id)))}
         </div>
+        <div class="grid2">
+          ${card("hk-budget", t("hk_budget_title"), t("hk_budget_sub"), null, cite(["legco_fc_hhb_2022"]) + `<p class="note">${t("hk_budget_note")}</p>`)}
+        </div>
+        ${card("tw-budget", t("tw_budget_title"), t("tw_budget_sub"), table(["col_period", "col_group", "col_value", "col_note", "col_source"], DATA.budget_lines.filter(b => b.region === "TW").map(b => [esc(b.fiscal_year), esc(zh(b, "program")) + " · " + t("cat_" + b.category), `<span class="num">${num(b.value)}</span>`, esc(zh(b, "scope")), `${srcBadge(b.source_id)} ${srcLink(b.source_id)}`]), [2]), null)}
+        ${card("gap-matrix", t("gap_title"), t("gap_sub"), table(["col_region", ...yearsRange.map(String)], ["HK", "TW", "MO"].map(r => [rname(r), ...yearsRange.map(y => gapCell(r, y))]), []), cite(["legco_fc_hhb_2022"]))}
         <p class="note gap">${t("mo_services_gap")}</p>
         ${details(t("all_figures"), table(["col_region", "col_period", "col_indicator", "col_group", "col_value", "col_note", "col_source"],
           DATA.services.map(d => [rname(d.region), esc(per(d.period)), t(d.indicator), esc(tl(d.group)), `<span class="num">${num(d.value)}</span>`, esc(zh(d, "note")), `${srcBadge(d.source_id)} ${srcLink(d.source_id)}`]), [4]))}`;
@@ -358,6 +374,7 @@
       const roll = months.map((m, i) => i >= 11 ? { label: m, value: months.slice(i - 11, i + 1).reduce((a, k) => a + byMonth[k], 0) } : null).filter(Boolean).slice(-24);
       Charts.barChart(has("hk-press"), { bars: roll, color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_press_title") });
     }
+    if (has("hk-budget")) Charts.barChart(has("hk-budget"), { bars: hkBudgetTotals().map(b => ({ label: b.fiscal_year + (b.stage === "revised_estimate" ? "*" : ""), value: +b.value })), color: "--s-hk", fmt: num, aria: t("hk_budget_title") });
     if (has("hk-att")) Charts.barChart(has("hk-att"), { bars: DATA.services.filter(d => d.region === "HK" && d.indicator === "psychiatric_attendances").map(d => ({ label: d.period, value: +d.value })), color: "--s-hk", fmt: num, emphasizeLast: true, aria: t("hk_att_title") });
     if (has("hk-wait")) Charts.hbarChart(has("hk-wait"), { rows: DATA.services.filter(d => d.region === "HK" && d.indicator === "routine_wait_weeks").map(d => ({ label: tl(d.group), value: +d.value, color: "--s-hk", sub: esc(zh(d, "note")) })), fmt: v => `${v} ${t("weeks")}` });
     document.querySelectorAll(".chart-card").forEach(c => {
