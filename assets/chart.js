@@ -71,7 +71,9 @@
       const col = css(s.color);
       for (let i = 1; i < pts.length; i++) {
         const a = pts[i - 1], b = pts[i];
-        svg.append(el("line", { x1: X(a.x), y1: Y(a.y), x2: X(b.x), y2: Y(b.y), stroke: col, "stroke-width": 2.5, "stroke-linecap": "round", "stroke-dasharray": b.x - a.x > 1 ? "4 5" : null }));
+        // A gap in the years breaks the line: no bridging segment, so no value is implied for missing years.
+        if (b.x - a.x > 1) continue;
+        svg.append(el("line", { x1: X(a.x), y1: Y(a.y), x2: X(b.x), y2: Y(b.y), stroke: col, "stroke-width": 2.5, "stroke-linecap": "round" }));
       }
       pts.forEach((p, i) => svg.append(el("circle", { cx: X(p.x), cy: Y(p.y), r: i === pts.length - 1 ? 5 : 3.5, fill: p.est ? surface : col, stroke: col, "stroke-width": 2 })));
       if (pts.length) { const p = pts[pts.length - 1]; ends.push({ x: X(p.x) + 9, y: Y(p.y) + 4, s: fmt(p.y) }); }
