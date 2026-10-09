@@ -55,3 +55,10 @@ Hong Kong 18111 · Samaritan Befrienders 2389 2222 · Taiwan 1925 · Macau Carit
 `data/update_calendar.csv` lists which sources to check in which month. A GitHub Action (`.github/workflows/monthly-reminder.yml`) opens an issue on the 1st of each month with that month's checklist; you can also run it by hand from the Actions tab, or print the list with `python3 scripts/update_reminder.py`.
 
 Every chart shows "data up to" and a CSV download button. Both are built from the data files, so they update when you do.
+
+## Data model (stage A, 2026-10-09)
+
+- `indicators.csv`: one row per indicator the site uses. Records the construct, unit, count type, denominator and comparability note.
+- `budget_lines.csv`: budget lines with their stage (actual expenditure, revised estimate, legal budget, proposed budget, approved plan total). Only values marked verified in the review spec are imported. HK components must sum to the total; the validator checks this.
+- `gaps.csv`: every year and region not yet verified (status V, L or M), with the reason, the sources searched and the next action. Only V items may be charted (`eligible_for_chart` must be `no` for L and M).
+- The existing CSVs (`suicide.csv`, `services.csv`, and so on) are unchanged in shape. They will be mapped to observations in a later stage.

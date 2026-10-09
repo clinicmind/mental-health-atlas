@@ -1,0 +1,17 @@
+indicator_id,name_en,name_zh,construct,unit,count_type,denominator,comparability_note,used_in
+suicide_deaths,Suicide deaths,自殺死亡人數,suicide,deaths,count of deaths,none,Death registration rules differ by place,suicide.csv measure=deaths
+crude_rate,Crude suicide rate,粗自殺死亡率,suicide,"per 100,000",rate,resident population of the year,Compare only within a place; denominators differ in source,suicide.csv measure=crude_rate
+age_std_rate,Age-standardised suicide rate,年齡標準化自殺死亡率,suicide,"per 100,000",rate,standard population (must be stated),Only comparable with the same standard population and definition,suicide.csv measure=age_std_rate
+attempt_notifications,Suicide attempt notifications,自殺通報個案,suicide,reports,count of reports,none,Reports are not unique people nor attempt rates,suicide.csv measure=attempt_notifications
+psychiatric_new_cases,"New psychiatric specialist outpatient cases, 0 to 29",精神科專科門診新症（0至29歲）,service use,cases,new cases in the period,none,A new case is not a first-ever illness,services.csv
+routine_wait_weeks,Routine wait for first psychiatric appointment,精神科首次預約穩定新症輪候,access,weeks,median (definition to verify),routine new cases,Definition not yet verified against the original table,services.csv
+hotline_calls,Help line calls,熱線來電,contact,calls,"contacts, not people",none,Calls are not people; periods differ,services.csv
+people_treated,People treated for mental illness,精神疾病就醫人數,service use,people,unique people (as published),none,Source definition differs from other series,services.csv
+psychiatric_beds,Psychiatric beds,精神科病床,capacity,beds,stock at a date,none,Beds are not service volume,services.csv
+rehab_places,Rehabilitation places,復健服務名額,capacity,places,stock at a date,none,Places are not users,services.csv
+psychiatric_attendances,Psychiatric outpatient attendances,精神科門診求診人次,service use,attendances,contacts,none,Attendances are not people,services.csv
+hk_ha_mh_expenditure,Hospital Authority mental health expenditure,醫管局精神健康服務開支,spending,HKD million,expenditure by fiscal year,none,Hospital Authority only; not total HK public spending,budget_lines.csv
+tw_resilience_plan_budget,National mental health resilience programme budget,全民心理健康韌性計畫預算,spending,TWD,budget line by year or plan total,none,"A programme figure, not total mental health spending",budget_lines.csv
+mo_public_mh_budget,Macau public mental health budget,澳門公共精神健康預算,spending,MOP,not yet located,none,No verified line; the health bureau total is not a mental health budget,none (gap)
+psychiatric_outpatient_attendances_mo,Macau psychiatric outpatient attendances 2024 (held),澳門精神科門診求診人次（暫存）,service use,attendances,contacts,none,Only from a legislator's question; not on the site,none (held)
+crude_rate_denominator,Denominator for Macau crude rates,澳門粗率分母,method,persons,population estimate,year-matched population,Approximate denominators; mid-year vs end-year not confirmed,suicide.csv estimate=yes

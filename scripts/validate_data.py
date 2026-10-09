@@ -16,9 +16,14 @@ REQUIRED = {
     "services.csv": ["region", "period", "indicator", "group", "value", "unit", "source_id"],
     "surveys.csv": ["region", "year", "survey", "population", "sample", "indicator", "value", "unit", "source_id", "method"],
     "suicide_quarterly.csv": ["region", "year", "quarter", "deaths", "source_id"],
+    "indicators.csv": ["indicator_id", "name_en", "name_zh", "construct", "unit", "count_type", "denominator", "comparability_note", "used_in"],
+    "budget_lines.csv": ["region", "fiscal_year", "period_type", "indicator_id", "program", "category", "stage", "value", "currency", "original_unit", "scope", "included_in_total", "source_id", "source_locator", "verification"],
+    "gaps.csv": ["region", "year", "indicator_id", "status", "missing_reason", "searched_sources", "next_action", "owner", "last_checked", "eligible_for_chart"],
 }
+STAGES = {"actual_expenditure", "revised_estimate", "legal_budget", "legal_budget_incl_supplementary", "proposed_budget", "approved_plan_total"}
+GAP_STATUS = {"V", "L", "M"}
 SOURCE_TYPES = {"government", "ngo", "academic", "news"}
-NUMERIC = {"suicide.csv": ["year", "value"], "services.csv": ["value"], "surveys.csv": ["sample", "value"], "suicide_quarterly.csv": ["year", "quarter", "deaths"]}
+NUMERIC = {"budget_lines.csv": ["value"], "suicide.csv": ["year", "value"], "services.csv": ["value"], "surveys.csv": ["sample", "value"], "suicide_quarterly.csv": ["year", "quarter", "deaths"]}
 
 
 def read(name):
@@ -41,14 +46,14 @@ def main():
             for col in REQUIRED[name]:
                 if not (row.get(col) or "").strip():
                     errors.append(f"{where}: empty '{col}'")
-            if row.get("region") not in REGIONS:
+            if "region" in REQUIRED[name] and row.get("region") not in REGIONS:
                 errors.append(f"{where}: unknown region '{row.get('region')}'")
             for col in NUMERIC.get(name, []):
                 try:
                     float(row[col])
                 except (TypeError, ValueError):
                     errors.append(f"{where}: '{col}' is not a number ({row.get(col)!r})")
-            if name != "sources.csv":
+            if name not in ("sources.csv", "indicators.csv", "gaps.csv") and "source_id" in row:
                 used.add(row["source_id"])
                 if row["source_id"] not in source_ids:
                     errors.append(f"{where}: source_id '{row['source_id']}' is not in sources.csv")
@@ -56,6 +61,31 @@ def main():
                 errors.append(f"{where}: type must be one of {sorted(SOURCE_TYPES)}")
             if name == "suicide.csv" and row.get("estimate") not in {"yes", "no"}:
                 errors.append(f"{where}: estimate must be yes or no")
+    indicator_ids = {row["indicator_id"] for row in tables["indicators.csv"]}
+    for i, row in enumerate(tables["budget_lines.csv"], start=2):
+        if row["stage"] not in STAGES:
+            errors.append(f"budget_lines.csv line {i}: unknown stage '{row['stage']}'")
+        if row["indicator_id"] not in indicator_ids:
+            errors.append(f"budget_lines.csv line {i}: indicator_id '{row['indicator_id']}' not in indicators.csv")
+    # Each HK fiscal year: the components must add up to the published total.
+    hk = {}
+    for row in tables["budget_lines.csv"]:
+        if row["region"] == "HK" and row["program"].startswith("Hospital Authority"):
+            part = hk.setdefault(row["fiscal_year"], {"parts": 0, "total": None})
+            if row["category"] == "total":
+                part["total"] = int(row["value"])
+            else:
+                part["parts"] += int(row["value"])
+    for year, part in hk.items():
+        if part["total"] is None or part["parts"] != part["total"]:
+            errors.append(f"budget_lines.csv: HK {year} components {part['parts']} do not equal total {part['total']}")
+    for i, row in enumerate(tables["gaps.csv"], start=2):
+        if row["status"] not in GAP_STATUS:
+            errors.append(f"gaps.csv line {i}: status must be V, L or M")
+        if row["eligible_for_chart"] != "no" and row["status"] != "V":
+            errors.append(f"gaps.csv line {i}: only V items may be charted")
+        if row["indicator_id"] not in indicator_ids:
+            errors.append(f"gaps.csv line {i}: indicator_id '{row['indicator_id']}' not in indicators.csv")
     for sid in sorted(source_ids - used):
         print(f"note: source '{sid}' is listed but no figure uses it yet")
     if errors:
