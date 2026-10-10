@@ -168,3 +168,8 @@ details.data .tablewrap { padding: 4px 8px 8px; }
 .about h2 { margin-top: 28px; }
 .about p, .about li { max-width: 62ch; line-height: 1.75; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.warn { padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-1); font-size: 14px; margin: 0 0 10px; }
+.stat .num { font-size: 26px; font-weight: 600; }
+.warn, .stat { overflow-wrap: anywhere; min-width: 0; }
+.card { min-width: 0; }

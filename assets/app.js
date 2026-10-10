@@ -66,6 +66,15 @@
   const overall = (r, m) => suicide({ region: r, sex: "all", age_group: "all", measure: m }).map(d => ({ ...d, y: +d.value, x: +d.year })).sort((a, b) => a.x - b.x);
 
   // ---------- building blocks ----------
+  // Student suicide deaths: a count, not a rate. Shown as a single figure with a caution, never charted.
+  function studentCard() {
+    const d = suicide({ region: "HK", measure: "student_suicide_deaths" })[0];
+    if (!d) return "";
+    const body = `<div class="warn" role="note"><strong>${t("student_warn_title")}</strong> ${t("student_warn_body")}</div>
+      <p class="sum"><span class="num">${esc(d.value)}</span> ${t("student_stat_label")} (${esc(d.year)})</p>`;
+    return card("hk-student", t("student_title"), t("student_sub"), body, cite([d.source_id]));
+  }
+
   function card(id, title, sub, body, note) {
     return `<section class="panel chart-card">
       <div><h2>${title}</h2>${sub ? `<p class="sub">${sub}</p>` : ""}</div>
@@ -262,6 +271,7 @@
           ${card("hk-groups", t("hk_groups_title"), t("hk_groups_sub"), null, cite(["csrp_2022"]))}
           ${card("hk-youth", t("hk_youth_title"), t("hk_youth_sub"), null, cite(suicide({ region: "HK", age_group: "15-24" }).map(d => d.source_id)))}
         </div>
+        <div class="grid2">${studentCard()}</div>
         <div class="grid2">
           ${card("tw-deaths", t("tw_deaths_title"), t("tw_deaths_sub"), null, cite(["mohw_suicide"]))}
           ${card("tw-age", t("tw_age_title"), t("tw_age_sub"), null, cite(["mohw_cod_113"]))}
