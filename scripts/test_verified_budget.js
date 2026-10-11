@@ -33,3 +33,9 @@ for (const row of rows) {
 }
 assert.equal(data.rules.aggregation, 'none');
 console.log('PASS: 18 IDs, HK/TW/MO/year/status filters, five separated series, null preservation, source units, component sums, no mutation.');
+
+assert.equal(helper.barLabel({period_start:"2016-04-01",period_end:"2017-03-31"}), "2016/17");
+assert.equal(helper.barLabel({period_start:"2025-01-01",period_end:"2025-12-31"}), "2025");
+assert.equal(helper.barLabel({period_start:"<img src=x onerror=alert(1)>",period_end:"2027-01-01"}), "–");
+for (const row of rows) assert.match(helper.barLabel(row), /^\d{4}(\/\d{2})?$/);
+console.log("PASS: short, HTML-safe fiscal chart labels.");

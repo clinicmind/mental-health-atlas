@@ -11,6 +11,12 @@ const VerifiedBudget = {
     rows.forEach(r => { const key = JSON.stringify(r.series_key); if (!groups.has(key)) groups.set(key, []); groups.get(key).push(r); });
     return [...groups.values()];
   },
+  barLabel(row) {
+    // Short, HTML-safe labels; full period and source version stay in the table.
+    const start = /^(\d{4})-/.exec(row.period_start || "");
+    const end = /^(\d{4})-/.exec(row.period_end || "");
+    return start ? start[1] + (end && end[1] !== start[1] ? "/" + end[1].slice(2) : "") : "–";
+  },
 };
 // BEGIN ATLAS APPLICATION
 // Loads the CSV files in /data and renders one chart-led section per tab.
@@ -290,12 +296,12 @@ const VerifiedBudget = {
     const rows = vbRows();
     document.getElementById("vb-count").textContent = vbText(`目前 ${rows.length} 筆觀測（含文件版本，不等於年份數）`, `${rows.length} observations (including document versions, not a count of years)`);
     const headings = [t("col_region"), vbText("年度", "Fiscal period"), vbText("原科目／機構", "Original account / provider"), vbText("會計狀態", "Accounting status"), vbText("原值／單位", "Original value / unit"), vbText("來源版本與限制", "Source vintage and limitations")];
-    wrap.innerHTML = !rows.length ? `<p>${vbText("此篩選沒有已核對觀測；缺失未補零，澳門資料仍待取得原文件。", "No verified observations for these filters. Missing values are not zero; Macau source documents remain to be obtained.")}</p>` :
+    wrap.innerHTML = !rows.length ? `<p>${vbText("此篩選沒有已核對觀測；缺失未補零，澳門尚無已核對的獨立財政金額。", "No verified observations for these filters. Missing values are not zero; no separate Macau fiscal amount has been verified yet.")}</p>` :
       VerifiedBudget.groups(rows).map((group, i) => `<h3>${esc(rname(group[0].region))} · ${esc(vbStatus(group[0].accounting_status))} · ${esc(vbUnit(group[0]))}</h3><p class="note">${esc(group[0].provider_scope)} · ${esc(group[0].population_scope)}</p><div class="chartwrap" id="vb-chart-${i}"></div>`).join("") +
-      `<div class="tablewrap"><table><caption>${vbText("圖表同源觀測；所有值保留原單位及版本", "Same observations as the charts; original units and versions retained")}</caption><thead><tr>${headings.map(h => `<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr><td>${esc(rname(r.region))}</td><td>${esc(r.fiscal_label)}</td><td>${esc(r.original_account)}<br>${esc(r.provider_scope)}</td><td>${esc(vbStatus(r.accounting_status))}<br><small>${vbText("已從文件抽取數值", "Value extracted from document")}</small></td><td class="num">${r.value == null ? vbText("缺失", "Missing") : num(r.value)} ${esc(vbUnit(r))}</td><td><details data-vb-observation="${esc(r.observation_id)}"><summary>${esc(vbVintage(r))} · ${vbText("來源／限制", "Source / limitations")}</summary><a href="${esc(r.source_url)}" target="_blank" rel="noopener">${esc(r.document_title || vbVintage(r))}</a><p>${esc(JSON.stringify(r.source_location))}</p><p>${esc(r.population_scope)}</p><p>${esc(r.aggregation_rule)}</p><p>${vbText("品質旗標（保留原代碼）", "Quality flags (original codes)")}: ${esc((r.quality_flags || []).join("; "))}</p><p>${vbText("查核日期", "Checked")}: ${esc(r.retrieved_date)}</p></details></td></tr>`).join("")}</tbody></table></div>`;
+      `<div class="tablewrap"><table><caption>${vbText("圖表同源觀測；所有值保留原單位及版本", "Same observations as the charts; original units and versions retained")}</caption><thead><tr>${headings.map(h => `<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr><td>${esc(rname(r.region))}</td><td>${esc(r.fiscal_label)}</td><td>${esc(r.original_account)}<br>${esc(r.provider_scope)}</td><td>${esc(vbStatus(r.accounting_status))}<br><small>${vbText("已從文件抽取數值", "Value extracted from document")}</small></td><td class="num">${r.value == null ? vbText("缺失", "Missing") : num(r.value)} ${esc(vbUnit(r))}</td><td><details data-vb-observation="${esc(r.observation_id)}"><summary id="vb-source-summary-${esc(r.observation_id)}">${esc(vbVintage(r))} · ${vbText("來源／限制", "Source / limitations")}</summary><a id="vb-source-link-${esc(r.observation_id)}" href="${esc(r.source_url)}" target="_blank" rel="noopener">${esc(r.document_title || vbVintage(r))}</a><p>${esc(JSON.stringify(r.source_location))}</p><p>${esc(r.population_scope)}</p><p>${esc(r.aggregation_rule)}</p><p>${vbText("品質旗標（保留原代碼）", "Quality flags (original codes)")}: ${esc((r.quality_flags || []).join("; "))}</p><p>${vbText("查核日期", "Checked")}: ${esc(r.retrieved_date)}</p></details></td></tr>`).join("")}</tbody></table></div>`;
     wrap.querySelectorAll("details").forEach(d => { if (openIds.includes(d.dataset.vbObservation)) d.open = true; });
     VerifiedBudget.groups(rows).forEach((group, i) => {
-      const bars = group.filter(r => r.value != null).map(r => ({ label: `${r.fiscal_label} · ${vbVintage(r)}`, value: r.value }));
+      const bars = group.filter(r => r.value != null).map(r => ({ label: VerifiedBudget.barLabel(r), value: r.value, note: esc(`${r.fiscal_label} · ${vbVintage(r)}`) }));
       if (bars.length) Charts.barChart(document.getElementById(`vb-chart-${i}`), { bars, color: region(group[0].region).color, fmt: num, aria: `${rname(group[0].region)} · ${vbStatus(group[0].accounting_status)} · ${vbUnit(group[0])}. ${vbText("數值見下方同源表格", "Values are in the same-source table below")}` });
     });
   }
