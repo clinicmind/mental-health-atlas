@@ -1,3 +1,24 @@
+// Pure selection helpers: preserve original values, versions and accounting status.
+const VerifiedBudget = {
+  select(rows, filters) {
+    return rows.filter(r => (!filters.region || filters.region === 'all' || r.region === filters.region)
+      && (!filters.status || filters.status === 'all' || r.accounting_status === filters.status)
+      && (!filters.year || filters.year === 'all' || r.period_start.slice(0, 4) === filters.year))
+      .slice().sort((a, b) => a.period_start.localeCompare(b.period_start) || a.observation_id.localeCompare(b.observation_id));
+  },
+  groups(rows) {
+    const groups = new Map();
+    rows.forEach(r => { const key = JSON.stringify(r.series_key); if (!groups.has(key)) groups.set(key, []); groups.get(key).push(r); });
+    return [...groups.values()];
+  },
+  barLabel(row) {
+    // Short, HTML-safe labels; full period and source version stay in the table.
+    const start = /^(\d{4})-/.exec(row.period_start || "");
+    const end = /^(\d{4})-/.exec(row.period_end || "");
+    return start ? start[1] + (end && end[1] !== start[1] ? "/" + end[1].slice(2) : "") : "–";
+  },
+};
+// BEGIN ATLAS APPLICATION
 // Loads the CSV files in /data and renders one chart-led section per tab.
 (function () {
   const REGIONS = [
@@ -9,6 +30,7 @@
   const TYPE_COLOR = { government: "--t-gov", ngo: "--t-ngo", academic: "--t-aca", news: "--t-news" };
   const state = { lang: "zh", tab: "overview", measure: "crude_rate", shown: new Set(REGIONS.map(r => r.id)), srcType: "all" };
   let DATA = null;
+  state.budget = { region: "HK", status: "reported_expenditure", year: "all" };
 
   try { const l = localStorage.getItem("atlas-lang"); if (l === "zh" || l === "en") state.lang = l; } catch (e) {}
 
@@ -53,6 +75,12 @@
     names.forEach((n, i) => { d[n] = parseCSV(texts[i]); });
     // Optional: monthly news-report counts from scripts/fetch_hkspd.py. The site works without it.
     try { const r = await fetch("data/hk_press_monthly.csv"); d.hk_press = r.ok ? parseCSV(await r.text()) : []; } catch (e) { d.hk_press = []; }
+    try {
+      const response = await fetch("data/verified_budget_observations.json");
+      if (!response.ok) throw new Error("verified budgets");
+      d.verifiedBudget = await response.json();
+      if (!Array.isArray(d.verifiedBudget.observations)) throw new Error("budget schema");
+    } catch (e) { d.verifiedBudget = null; }
     d.sourceById = Object.fromEntries(d.sources.map(s => [s.source_id, s]));
     return d;
   }
@@ -238,6 +266,59 @@
     }));
   }
 
+  // Independent document-verified series; never aggregate with legacy programme CSVs.
+  const vbText = (cn, en) => state.lang === "zh" ? cn : en;
+  const vbStatus = status => ({
+    reported_expenditure: ["文件歷史開支／成本（未取得獨立審計）", "Reported expenditure / costs (not independently audited here)"],
+    estimate: ["預算估算", "Estimate"], revised_estimate: ["修訂估算", "Revised estimate"],
+    budget_proposal: ["預算案", "Budget proposal"], enacted_budget: ["法定預算", "Enacted budget"],
+  }[status] || [status, status])[state.lang === "zh" ? 0 : 1];
+  const vbUnit = r => `${r.currency} / ${r.unit === "million" ? vbText("百萬", "million") : r.unit === "thousand" ? vbText("千", "thousand") : r.unit}`;
+  const vbVintage = r => r.source_vintage || vbText("來源版本未記錄", "Source vintage not recorded");
+  const vbRows = () => VerifiedBudget.select(DATA.verifiedBudget?.observations || [], state.budget);
+  function verifiedBudgetCard() {
+    const rows = DATA.verifiedBudget?.observations || [];
+    const select = (field, label, options) => `<label for="vb-${field}">${label}<select id="vb-${field}" data-vb-filter="${field}">${options.map(([value, name]) => `<option value="${esc(value)}" ${state.budget[field] === value ? "selected" : ""}>${esc(name)}</option>`).join("")}</select></label>`;
+    return `<section class="panel chart-card" id="verified-budget"><h2>${vbText("已核對原文件：心理健康財政觀測", "Document-verified mental health fiscal observations")}</h2>
+      <p class="note">${vbText("香港為醫管局服務成本，台灣為中央單一分支計畫；範圍、幣別與會計狀態不同，不能作三地排名或全地區總額。下方既有計畫資料可能重疊，不與本卡加總。", "Hong Kong covers HA service costs; Taiwan covers one central-government subprogramme. Scope, currency and accounting status differ: no regional ranking or whole-region total. Existing programme data below may overlap and must not be added to this card.")}</p>
+      ${!DATA.verifiedBudget ? `<p role="status">${vbText("已核對觀測檔未能載入；既有資料仍可使用。", "Verified observations could not be loaded; existing data remain available.")}</p>` : `
+      <div class="vb-filters">${select("region", t("col_region"), [["all", vbText("全部地區（各自分圖）", "All regions (separate charts)")], ...REGIONS.map(r => [r.id, rname(r.id)])])}
+      ${select("status", vbText("會計狀態", "Accounting status"), [["all", vbText("全部狀態（各自分圖）", "All statuses (separate charts)")], ...[...new Set(rows.map(r => r.accounting_status))].map(v => [v, vbStatus(v)])])}
+      ${select("year", vbText("財政起始年", "Fiscal starting year"), [["all", vbText("全部年份", "All years")], ...[...new Set(rows.map(r => r.period_start.slice(0, 4)))].sort().map(y => [y, y])])}</div>
+      <p id="vb-count" role="status" aria-live="polite"></p>
+      <div id="vb-results"></div>
+      <button type="button" class="dl" id="vb-download">${vbText("下載目前觀測 JSON（原值及單位）", "Download filtered JSON (original values and units)")}</button>`}
+    </section>`;
+  }
+  function drawVerifiedBudget() {
+    const wrap = document.getElementById("vb-results"); if (!wrap) return;
+    const openIds = [...wrap.querySelectorAll("details[open]")].map(d => d.dataset.vbObservation);
+    const rows = vbRows();
+    document.getElementById("vb-count").textContent = vbText(`目前 ${rows.length} 筆觀測（含文件版本，不等於年份數）`, `${rows.length} observations (including document versions, not a count of years)`);
+    const headings = [t("col_region"), vbText("年度", "Fiscal period"), vbText("原科目／機構", "Original account / provider"), vbText("會計狀態", "Accounting status"), vbText("原值／單位", "Original value / unit"), vbText("來源版本與限制", "Source vintage and limitations")];
+    wrap.innerHTML = !rows.length ? `<p>${vbText("此篩選沒有已核對觀測；缺失未補零，澳門尚無已核對的獨立財政金額。", "No verified observations for these filters. Missing values are not zero; no separate Macau fiscal amount has been verified yet.")}</p>` :
+      VerifiedBudget.groups(rows).map((group, i) => `<h3>${esc(rname(group[0].region))} · ${esc(vbStatus(group[0].accounting_status))} · ${esc(vbUnit(group[0]))}</h3><p class="note">${esc(group[0].provider_scope)} · ${esc(group[0].population_scope)}</p><div class="chartwrap" id="vb-chart-${i}"></div>`).join("") +
+      `<div class="tablewrap"><table><caption>${vbText("圖表同源觀測；所有值保留原單位及版本", "Same observations as the charts; original units and versions retained")}</caption><thead><tr>${headings.map(h => `<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr><td>${esc(rname(r.region))}</td><td>${esc(r.fiscal_label)}</td><td>${esc(r.original_account)}<br>${esc(r.provider_scope)}</td><td>${esc(vbStatus(r.accounting_status))}<br><small>${vbText("已從文件抽取數值", "Value extracted from document")}</small></td><td class="num">${r.value == null ? vbText("缺失", "Missing") : num(r.value)} ${esc(vbUnit(r))}</td><td><details data-vb-observation="${esc(r.observation_id)}"><summary id="vb-source-summary-${esc(r.observation_id)}">${esc(vbVintage(r))} · ${vbText("來源／限制", "Source / limitations")}</summary><a id="vb-source-link-${esc(r.observation_id)}" href="${esc(r.source_url)}" target="_blank" rel="noopener">${esc(r.document_title || vbVintage(r))}</a><p>${esc(JSON.stringify(r.source_location))}</p><p>${esc(r.population_scope)}</p><p>${esc(r.aggregation_rule)}</p><p>${vbText("品質旗標（保留原代碼）", "Quality flags (original codes)")}: ${esc((r.quality_flags || []).join("; "))}</p><p>${vbText("查核日期", "Checked")}: ${esc(r.retrieved_date)}</p></details></td></tr>`).join("")}</tbody></table></div>`;
+    wrap.querySelectorAll("details").forEach(d => { if (openIds.includes(d.dataset.vbObservation)) d.open = true; });
+    VerifiedBudget.groups(rows).forEach((group, i) => {
+      const bars = group.filter(r => r.value != null).map(r => ({ label: VerifiedBudget.barLabel(r), value: r.value, note: esc(`${r.fiscal_label} · ${vbVintage(r)}`) }));
+      if (bars.length) Charts.barChart(document.getElementById(`vb-chart-${i}`), { bars, color: region(group[0].region).color, fmt: num, aria: `${rname(group[0].region)} · ${vbStatus(group[0].accounting_status)} · ${vbUnit(group[0])}. ${vbText("數值見下方同源表格", "Values are in the same-source table below")}` });
+    });
+  }
+  function bindVerifiedBudget() {
+    if (!document.getElementById("verified-budget")) return;
+    document.querySelectorAll("[data-vb-filter]").forEach(control => control.addEventListener("change", () => {
+      state.budget[control.dataset.vbFilter] = control.value;
+      drawVerifiedBudget(); // Keep controls and focus in place; no full-page render.
+    }));
+    document.getElementById("vb-download")?.addEventListener("click", () => {
+      const payload = { schema_version: DATA.verifiedBudget.schema_version, filters: { ...state.budget }, rules: DATA.verifiedBudget.rules, observations: vbRows() };
+      const a = document.createElement("a"); const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
+      a.href = url; a.download = "atlas-verified-budget-observations.json"; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+    drawVerifiedBudget();
+  }
+
   // ---------- views ----------
   const views = {
     overview() {
@@ -292,6 +373,7 @@
             ${DATA.services.filter(d => d.indicator === "people_treated").map(d => `<div class="stat"><span class="big">${num(d.value)}</span><span class="k">${dot(region(d.region).color)} ${rname(d.region)} · ${t("people_treated")}</span><span class="s">${esc(per(d.period))}</span></div>`).join("")}
           </div>`, cite(DATA.services.filter(d => d.indicator === "hotline_calls" || d.indicator === "people_treated").map(d => d.source_id)))}
         </div>
+        ${verifiedBudgetCard()}
         <div class="grid2">
           ${card("hk-budget", t("hk_budget_title"), t("hk_budget_sub"), null, cite(["legco_fc_hhb_2022"]) + `<p class="note">${t("hk_budget_note")}</p>`)}
         </div>
@@ -339,6 +421,7 @@
   };
 
   function afterRender() {
+    bindVerifiedBudget();
     drawSparks();
     if (document.getElementById("trend")) bindTrend();
     const has = id => document.getElementById(id);
@@ -396,8 +479,12 @@
     applyStaticText();
     document.querySelectorAll(".tabs a").forEach(a => { if (a.dataset.tab === state.tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
     if (!DATA) return;
+    const focusedId = document.activeElement?.id;
+    const openBudgetSources = [...document.querySelectorAll("#vb-results details[open]")].map(d => d.dataset.vbObservation);
     document.getElementById("app").innerHTML = views[state.tab]();
     afterRender();
+    document.querySelectorAll("#vb-results details").forEach(d => { if (openBudgetSources.includes(d.dataset.vbObservation)) d.open = true; });
+    if (focusedId?.startsWith("vb-")) document.getElementById(focusedId)?.focus({ preventScroll: true });
   }
 
   function route() {
@@ -427,3 +514,4 @@
     document.getElementById("app").innerHTML = `<p class="loading">${t("load_error")}</p>`;
   });
 })();
+

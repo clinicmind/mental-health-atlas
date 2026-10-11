@@ -168,3 +168,14 @@ details.data .tablewrap { padding: 4px 8px 8px; }
 .about h2 { margin-top: 28px; }
 .about p, .about li { max-width: 62ch; line-height: 1.75; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+
+/* Verified fiscal observations: native keyboard controls and readable source table. */
+.vb-filters { display:flex; flex-wrap:wrap; gap:12px; margin-block:12px; }
+.vb-filters label { display:grid; gap:4px; flex:1 1 180px; min-width:0; }
+.vb-filters select { width:100%; font:inherit; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:8px; }
+.vb-filters select:focus-visible, #verified-budget summary:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+#verified-budget > .tablewrap { max-width:100%; }
+#vb-results td { vertical-align:top; }
+#vb-results details { max-width:28rem; overflow-wrap:anywhere; }
+#vb-results caption { text-align:start; color:var(--ink-2); padding-block:8px; }
